@@ -109,6 +109,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(-
 .btn-submit:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:var(--shadow);}
 .cc-foot{display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;
   font-size:.7rem;color:var(--gray-400);margin-top:.75rem;}
+.prop-type-btn{display:flex;align-items:center;gap:.4rem;padding:.65rem .9rem;
+  border:1.5px solid var(--gray-200);border-radius:8px;font-size:.85rem;font-weight:500;
+  color:var(--gray-700);cursor:pointer;transition:all .2s;background:var(--gray-50);}
+.prop-type-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light);}
+.prop-type-btn.active{border-color:var(--blue);color:var(--blue);background:var(--blue-light);font-weight:700;}
 
 /* TRUST STRIP */
 .trust-strip{background:var(--white);border-bottom:1px solid var(--gray-200);padding:.9rem 5%;
@@ -359,49 +364,85 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
 
       <!-- FORM -->
       <div class="check-card">
-        <div class="cc-title">Start Your Property Check</div>
-        <div class="cc-sub">Fill details below to get your free preview</div>
+        <div class="cc-title">Property Fraud Check Karo</div>
+        <div class="cc-sub">Property details bharo — free preview milega</div>
 
+        <!-- State -->
         <div class="form-group">
-          <label class="form-label">Full Name</label>
+          <label class="form-label">State</label>
           <div class="inp-wrap">
-            <span class="inp-ico">👤</span>
-            <input class="f-input" placeholder="Rahul Sharma" id="f-name"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Mobile Number</label>
-          <div class="inp-wrap">
-            <span class="inp-ico">📱</span>
-            <input class="f-input" placeholder="+91 98765 43210" id="f-phone" type="tel"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <div class="inp-wrap">
-            <span class="inp-ico">📧</span>
-            <input class="f-input" placeholder="rahul@gmail.com" id="f-email" type="email"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Property State</label>
-          <div class="inp-wrap">
-            <span class="inp-ico">📍</span>
-            <select class="f-select" id="f-state">
+            <span class="inp-ico">🗺</span>
+            <select class="f-select" id="f-state" onchange="onStateChange()">
               <option value="">Select State</option>
-              <option>Maharashtra</option><option>Delhi</option><option>Karnataka</option>
-              <option>Telangana</option><option>Tamil Nadu</option><option>Gujarat</option>
-              <option>Uttar Pradesh</option><option>Haryana</option><option>Rajasthan</option>
-              <option>West Bengal</option><option>Punjab</option><option>Other</option>
+              <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+              <option>Chhattisgarh</option><option>Delhi</option><option>Goa</option>
+              <option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option>
+              <option>Jharkhand</option><option>Karnataka</option><option>Kerala</option>
+              <option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option>
+              <option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option>
+              <option>Odisha</option><option>Punjab</option><option>Rajasthan</option>
+              <option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option>
+              <option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option>
+              <option>West Bengal</option><option>Other</option>
             </select>
           </div>
         </div>
+
+        <!-- District -->
         <div class="form-group">
-          <label class="form-label">Plot / Property Number or Address</label>
+          <label class="form-label">District</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">🏛</span>
+            <input class="f-input" placeholder="e.g. Paschim Medinipur" id="f-district"/>
+          </div>
+        </div>
+
+        <!-- City/Town/Village -->
+        <div class="form-group">
+          <label class="form-label">City / Town / Village</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">🏘</span>
+            <input class="f-input" placeholder="e.g. Midnapore" id="f-city"/>
+          </div>
+        </div>
+
+        <!-- Full Property Address -->
+        <div class="form-group">
+          <label class="form-label">Full Property Address</label>
           <div class="inp-wrap">
             <span class="inp-ico">🏠</span>
-            <input class="f-input" placeholder="e.g. Plot 42, Koramangala, Bangalore" id="f-prop"/>
+            <input class="f-input" placeholder="e.g. C 57/1, Aurobindanagar" id="f-prop"/>
           </div>
+        </div>
+
+        <!-- PIN Code -->
+        <div class="form-group">
+          <label class="form-label">PIN Code</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">📮</span>
+            <input class="f-input" placeholder="e.g. 721101" id="f-pin" type="tel" maxlength="6" oninput="onPinInput(this)"/>
+          </div>
+          <div id="pin-info" style="font-size:.75rem;color:var(--green);margin-top:.3rem;display:none;"></div>
+        </div>
+
+        <!-- Property Type -->
+        <div class="form-group">
+          <label class="form-label">Property Type</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+            <label class="prop-type-btn" id="pt-plot" onclick="selectType('Plot')">
+              <span>🏞</span> Plot
+            </label>
+            <label class="prop-type-btn" id="pt-flat" onclick="selectType('Flat/Apartment')">
+              <span>🏢</span> Flat/Apartment
+            </label>
+            <label class="prop-type-btn" id="pt-house" onclick="selectType('House')">
+              <span>🏠</span> House
+            </label>
+            <label class="prop-type-btn" id="pt-commercial" onclick="selectType('Commercial')">
+              <span>🏪</span> Commercial
+            </label>
+          </div>
+          <input type="hidden" id="f-proptype" value=""/>
         </div>
 
         <button class="btn-submit" onclick="runCheck()">
@@ -699,25 +740,52 @@ const steps=[
   {text:'Generating fraud risk score...',step:'Step 4 of 4',pct:95},
 ];
 
+function onStateChange(){}
+function selectType(type){
+  document.getElementById('f-proptype').value=type;
+  ['plot','flat','house','commercial'].forEach(t=>document.getElementById('pt-'+t).classList.remove('active'));
+  const map={Plot:'plot','Flat/Apartment':'flat',House:'house',Commercial:'commercial'};
+  if(map[type]) document.getElementById('pt-'+map[type]).classList.add('active');
+}
+async function onPinInput(el){
+  const pin=el.value.trim();
+  const info=document.getElementById('pin-info');
+  if(pin.length===6){
+    try{
+      const r=await fetch('https://api.postalpincode.in/pincode/'+pin);
+      const d=await r.json();
+      if(d[0].Status==='Success'){
+        const p=d[0].PostOffice[0];
+        info.style.display='block';
+        info.textContent='✅ '+p.District+', '+p.State;
+        if(!document.getElementById('f-district').value) document.getElementById('f-district').value=p.District;
+        if(!document.getElementById('f-city').value) document.getElementById('f-city').value=p.Block||p.Name;
+        if(!document.getElementById('f-state').value||document.getElementById('f-state').value==='') {
+          const sel=document.getElementById('f-state');
+          for(let i=0;i<sel.options.length;i++){if(sel.options[i].text===p.State){sel.selectedIndex=i;break;}}
+        }
+      }else{info.style.display='block';info.style.color='var(--red)';info.textContent='❌ Invalid PIN code';}
+    }catch(e){info.style.display='none';}
+  }else{info.style.display='none';}
+}
 function runCheck(){
-  const name=document.getElementById('f-name').value.trim();
-  const phone=document.getElementById('f-phone').value.trim();
-  const email=document.getElementById('f-email').value.trim();
   const state=document.getElementById('f-state').value;
+  const district=document.getElementById('f-district').value.trim();
+  const city=document.getElementById('f-city').value.trim();
   const prop=document.getElementById('f-prop').value.trim();
-  if(!name||!phone||!email||!state||!prop){
-    alert('Please fill all fields including Email.');return;
+  const pin=document.getElementById('f-pin').value.trim();
+  const proptype=document.getElementById('f-proptype').value;
+  if(!state||!district||!city||!prop||!pin||!proptype){
+    alert('Sab fields bharo — State, District, City, Address, PIN Code aur Property Type.');return;
   }
-  if(!email.includes('@')){
-    alert('Valid email address daalo.');return;
-  }
-
-  // Store globally
-  window._userData = { name, phone, email, state, prop };
+  if(pin.length!==6){alert('Valid 6-digit PIN Code daalo.');return;}
+  const fullAddress=prop+', '+city+', '+district+', '+state+' - '+pin;
+  // Store globally — name/phone/email payment pe lenge
+  window._userData = { name:'', phone:'', email:'', state, district, city, prop, pin, proptype, fullAddress };
 
   // Store for result page
-  document.getElementById('result-addr').textContent=prop;
-  document.getElementById('result-meta').textContent=name+' · '+phone+' · '+state;
+  document.getElementById('result-addr').textContent=fullAddress;
+  document.getElementById('result-meta').textContent=proptype+' · '+city+', '+district+', '+state;
 
   // Show loading
   const overlay=document.getElementById('loading-overlay');
@@ -753,16 +821,22 @@ const API_URL = 'https://propty24backend.ritammitra2003.workers.dev';
 async function goGetReport(plan) {
   const ud = window._userData;
   if(!ud){ alert('Please fill the form first.'); showLanding(); return; }
-
-  // Show email confirm modal
   document.getElementById('email-modal').style.display='flex';
   document.getElementById('modal-plan').textContent = plan;
-  document.getElementById('modal-email').textContent = ud.email;
+  document.getElementById('modal-name').value='';
+  document.getElementById('modal-phone').value='';
+  document.getElementById('modal-email').value='';
   document.getElementById('modal-confirm-btn').onclick = () => submitReport(plan);
 }
 
 async function submitReport(plan) {
   const ud = window._userData;
+  const name=document.getElementById('modal-name').value.trim();
+  const phone=document.getElementById('modal-phone').value.trim();
+  const email=document.getElementById('modal-email').value.trim();
+  if(!name||!phone||!email){alert('Name, Phone aur Email sab bharo!');return;}
+  if(!email.includes('@')){alert('Valid email daalo!');return;}
+  ud.name=name; ud.phone=phone; ud.email=email;
   const btn = document.getElementById('modal-confirm-btn');
   btn.disabled = true;
   btn.textContent = 'Sending...';
@@ -775,7 +849,7 @@ async function submitReport(plan) {
         name: ud.name,
         phone: ud.phone,
         email: ud.email,
-        property_address: ud.prop + ', ' + ud.state,
+        property_address: ud.fullAddress,
         plan: plan,
         amount: 0
       })
@@ -808,25 +882,41 @@ document.querySelectorAll('.mob-menu a').forEach(a=>a.addEventListener('click',c
 </script>
 
 <!-- EMAIL CONFIRM MODAL -->
-<div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+<div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
   z-index:1000;align-items:center;justify-content:center;padding:1rem;">
   <div style="background:white;border-radius:16px;padding:2rem;max-width:420px;width:100%;
     box-shadow:0 25px 60px rgba(0,0,0,.3);">
-    <div style="font-size:2rem;text-align:center;margin-bottom:.5rem;">📧</div>
+    <div style="font-size:2rem;text-align:center;margin-bottom:.5rem;">📋</div>
     <div style="font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;
-      color:#0F172A;text-align:center;margin-bottom:.4rem;">Report Email Pe Jayegi</div>
-    <div style="font-size:.85rem;color:#64748B;text-align:center;margin-bottom:1.5rem;line-height:1.6;">
-      <strong id="modal-plan"></strong> report bhej rahe hain:<br/>
-      <strong style="color:#1B4FD8" id="modal-email"></strong>
+      color:#0F172A;text-align:center;margin-bottom:.25rem;">Aapki Details Bharo</div>
+    <div style="font-size:.8rem;color:#64748B;text-align:center;margin-bottom:1.2rem;">
+      Report aapke email pe bheja jaayega — <strong id="modal-plan"></strong> plan
     </div>
+
+    <div style="margin-bottom:.75rem;">
+      <label style="font-size:.7rem;font-weight:600;color:#334155;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.3rem;">Full Name</label>
+      <input id="modal-name" type="text" placeholder="Rahul Sharma"
+        style="width:100%;padding:.7rem .9rem;border:1.5px solid #E2E8F0;border-radius:8px;font-size:.9rem;outline:none;font-family:'Inter',sans-serif;"/>
+    </div>
+    <div style="margin-bottom:.75rem;">
+      <label style="font-size:.7rem;font-weight:600;color:#334155;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.3rem;">Mobile Number</label>
+      <input id="modal-phone" type="tel" placeholder="+91 98765 43210"
+        style="width:100%;padding:.7rem .9rem;border:1.5px solid #E2E8F0;border-radius:8px;font-size:.9rem;outline:none;font-family:'Inter',sans-serif;"/>
+    </div>
+    <div style="margin-bottom:1rem;">
+      <label style="font-size:.7rem;font-weight:600;color:#334155;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.3rem;">Email Address</label>
+      <input id="modal-email" type="email" placeholder="rahul@gmail.com"
+        style="width:100%;padding:.7rem .9rem;border:1.5px solid #E2E8F0;border-radius:8px;font-size:.9rem;outline:none;font-family:'Inter',sans-serif;"/>
+    </div>
+
     <div style="background:#F0FDF4;border:1px solid rgba(22,163,74,.2);border-radius:8px;
-      padding:.9rem;margin-bottom:1.2rem;font-size:.82rem;color:#16A34A;text-align:center;">
-      ✅ PDF report 24-48 hours mein email pe milegi
+      padding:.75rem;margin-bottom:1rem;font-size:.78rem;color:#16A34A;text-align:center;">
+      ✅ Report 24-48 hours mein email pe milegi
     </div>
     <button id="modal-confirm-btn"
       style="width:100%;background:#1B4FD8;color:white;border:none;padding:.9rem;
       border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;margin-bottom:.6rem;">
-      ✅ Haan, Report Bhejo
+      ✅ Confirm & Get Report
     </button>
     <button onclick="document.getElementById('email-modal').style.display='none'"
       style="width:100%;background:none;border:1.5px solid #E2E8F0;color:#64748B;
