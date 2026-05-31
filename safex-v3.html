@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SAFEX — Property Fraud Check</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --blue:#1B4FD8;--blue-dark:#1340B0;--blue-light:#EEF3FF;
+  --green:#16A34A;--green-light:#DCFCE7;
+  --orange:#EA580C;--orange-light:#FFF7ED;
+  --red:#DC2626;--red-light:#FEE2E2;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;
+  --gray-300:#CBD5E1;--gray-400:#94A3B8;--gray-500:#64748B;
+  --gray-700:#334155;--gray-900:#0F172A;
+  --white:#FFFFFF;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+  --shadow:0 4px 16px rgba(0,0,0,.1);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.14);
+}
+body{font-family:'Inter',sans-serif;background:var(--gray-50);color:var(--gray-900);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--white);
+  border-bottom:1px solid var(--gray-200);display:flex;align-items:center;
+  justify-content:space-between;padding:0 5%;box-shadow:var(--shadow-sm);}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;}
+.logo-icon{width:34px;height:34px;background:var(--blue);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.logo-text{font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:var(--gray-900);}
+.logo-text span{color:var(--blue);}
+.logo-sub{font-size:.65rem;color:var(--gray-400);font-weight:400;display:block;margin-top:-3px;}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none;}
+.nav-links a{color:var(--gray-500);font-size:.875rem;font-weight:500;text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--blue);}
+.nav-wa{display:flex;align-items:center;gap:.45rem;background:#25D366;color:var(--white);
+  padding:.5rem 1.1rem;border-radius:6px;font-size:.82rem;font-weight:600;text-decoration:none;transition:all .2s;}
+.nav-wa:hover{background:#1fba58;transform:translateY(-1px);}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hbg span{display:block;width:22px;height:2px;background:var(--gray-700);border-radius:2px;transition:all .3s;}
+.hbg.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hbg.open span:nth-child(2){opacity:0;}
+.hbg.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mob-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--white);
+  border-bottom:1px solid var(--gray-200);padding:1.5rem 5%;flex-direction:column;
+  gap:1.2rem;z-index:99;box-shadow:var(--shadow);
+  opacity:0;transform:translateY(-8px);transition:all .25s;}
+.mob-menu.show{opacity:1;transform:translateY(0);}
+.mob-menu a{color:var(--gray-700);font-size:.95rem;font-weight:500;text-decoration:none;
+  padding-bottom:1rem;border-bottom:1px solid var(--gray-100);}
+.mob-menu a:last-child{border-bottom:none;}
+
+/* ═══════════════════════════
+   PAGE 1 — LANDING HERO
+═══════════════════════════ */
+#page-landing{display:block;}
+#page-result{display:none;}
+
+.hero{padding:80px 5% 60px;background:linear-gradient(135deg,#0F172A 0%,#1B4FD8 100%);
+  min-height:100vh;display:flex;align-items:center;}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;
+  grid-template-columns:1.1fr .9fr;gap:4rem;align-items:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:.35rem .9rem;
+  font-size:.72rem;color:rgba(255,255,255,.9);font-weight:500;margin-bottom:1.5rem;}
+.badge-dot{width:7px;height:7px;background:#4ADE80;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}}
+.hero-h1{font-family:'Poppins',sans-serif;font-size:clamp(2.2rem,4.5vw,3.5rem);
+  font-weight:800;color:var(--white);line-height:1.1;margin-bottom:1rem;}
+.hero-h1 .hl{color:#FCD34D;}
+.hero-p{font-size:clamp(.9rem,1.5vw,1.05rem);color:rgba(255,255,255,.75);
+  line-height:1.75;margin-bottom:2rem;font-weight:400;max-width:440px;}
+.hero-tags{display:flex;gap:.75rem;flex-wrap:wrap;}
+.h-tag{display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.15);border-radius:6px;
+  padding:.4rem .8rem;font-size:.78rem;color:rgba(255,255,255,.85);}
+.h-tag-icon{font-size:.9rem;}
+
+/* CHECK FORM CARD */
+.check-card{background:var(--white);border-radius:16px;padding:2rem;
+  box-shadow:0 25px 60px rgba(0,0,0,.25);}
+.cc-title{font-family:'Poppins',sans-serif;font-size:1.15rem;font-weight:700;
+  color:var(--gray-900);margin-bottom:.25rem;}
+.cc-sub{font-size:.8rem;color:var(--gray-500);margin-bottom:1.5rem;}
+.form-group{margin-bottom:.9rem;}
+.form-label{font-size:.72rem;font-weight:600;color:var(--gray-700);
+  text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.35rem;}
+.inp-wrap{position:relative;}
+.inp-ico{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);
+  color:var(--gray-400);font-size:.95rem;pointer-events:none;}
+.f-input{width:100%;padding:.75rem .9rem .75rem 2.5rem;border:1.5px solid var(--gray-200);
+  border-radius:8px;font-family:'Inter',sans-serif;font-size:.9rem;color:var(--gray-900);
+  background:var(--gray-50);outline:none;transition:all .2s;}
+.f-input:focus{border-color:var(--blue);background:var(--white);
+  box-shadow:0 0 0 3px rgba(27,79,216,.1);}
+.f-input::placeholder{color:var(--gray-400);}
+.f-select{width:100%;padding:.75rem .9rem .75rem 2.5rem;border:1.5px solid var(--gray-200);
+  border-radius:8px;font-family:'Inter',sans-serif;font-size:.9rem;color:var(--gray-900);
+  background:var(--gray-50);outline:none;appearance:none;transition:all .2s;cursor:pointer;}
+.f-select:focus{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(27,79,216,.1);}
+.f-select option{background:var(--white);}
+.btn-submit{width:100%;padding:1rem;background:var(--blue);color:var(--white);border:none;
+  border-radius:8px;font-family:'Inter',sans-serif;font-weight:700;font-size:1rem;
+  cursor:pointer;transition:all .2s;margin-top:.5rem;display:flex;
+  align-items:center;justify-content:center;gap:.5rem;}
+.btn-submit:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:var(--shadow);}
+.cc-foot{display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;
+  font-size:.7rem;color:var(--gray-400);margin-top:.75rem;}
+
+/* TRUST STRIP */
+.trust-strip{background:var(--white);border-bottom:1px solid var(--gray-200);padding:.9rem 5%;
+  display:flex;align-items:center;gap:2.5rem;overflow-x:auto;white-space:nowrap;}
+.trust-strip::-webkit-scrollbar{display:none;}
+.ts-label{font-size:.68rem;color:var(--gray-400);font-weight:600;text-transform:uppercase;
+  letter-spacing:1px;flex-shrink:0;}
+.ts-div{width:1px;height:18px;background:var(--gray-200);flex-shrink:0;}
+.city-item{font-size:.82rem;color:var(--gray-500);flex-shrink:0;font-weight:500;}
+
+/* HOW IT WORKS */
+.how-sec{padding:80px 5%;background:var(--white);}
+.sec-center{text-align:center;margin-bottom:3.5rem;}
+.sec-badge{display:inline-block;background:var(--blue-light);color:var(--blue);
+  font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:.35rem .9rem;border-radius:100px;margin-bottom:.75rem;}
+.sec-h{font-family:'Poppins',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);
+  font-weight:700;color:var(--gray-900);margin-bottom:.75rem;}
+.sec-h span{color:var(--blue);}
+.sec-p{color:var(--gray-500);font-size:.95rem;max-width:480px;margin:0 auto;line-height:1.7;}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;max-width:1000px;margin:0 auto;}
+.step{text-align:center;padding:1.5rem 1rem;position:relative;}
+.step-num{width:44px;height:44px;background:var(--blue);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;
+  font-weight:700;color:var(--white);font-size:1rem;margin:0 auto 1rem;}
+.step-ico{font-size:2rem;margin-bottom:.75rem;}
+.step-t{font-weight:600;font-size:.95rem;color:var(--gray-900);margin-bottom:.4rem;}
+.step-d{font-size:.8rem;color:var(--gray-500);line-height:1.6;}
+.step-arrow{position:absolute;right:-12px;top:38px;color:var(--gray-300);font-size:1.2rem;}
+.step:last-child .step-arrow{display:none;}
+
+/* FOOTER */
+footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:2.5rem;margin-bottom:2.5rem;}
+.ft-brand{font-family:'Poppins',sans-serif;font-size:1.3rem;font-weight:700;color:var(--white);margin-bottom:.4rem;}
+.ft-brand span{color:#60A5FA;}
+.ft-tag{font-size:.8rem;color:rgba(255,255,255,.4);line-height:1.6;max-width:200px;}
+.ft-col h4{font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);
+  margin-bottom:1rem;font-weight:600;}
+.ft-col a{display:block;font-size:.83rem;color:rgba(255,255,255,.5);text-decoration:none;
+  margin-bottom:.55rem;transition:color .2s;}
+.ft-col a:hover{color:var(--white);}
+.ft-contact{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:.55rem;}
+.ft-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+  padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.08);}
+.ft-bottom p{font-size:.72rem;color:rgba(255,255,255,.3);}
+
+/* ═══════════════════════════
+   PAGE 2 — FREE RESULT
+═══════════════════════════ */
+.result-page{padding:80px 5% 60px;max-width:900px;margin:0 auto;}
+.result-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.result-title{font-family:'Poppins',sans-serif;font-size:1.3rem;font-weight:700;color:var(--gray-900);}
+.result-subtitle{font-size:.85rem;color:var(--gray-500);margin-top:.15rem;}
+.back-btn{display:flex;align-items:center;gap:.3rem;background:none;border:1.5px solid var(--gray-200);
+  border-radius:7px;padding:.5rem 1rem;font-size:.82rem;font-weight:500;color:var(--gray-600);
+  cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;}
+.back-btn:hover{border-color:var(--blue);color:var(--blue);}
+
+/* Property info bar */
+.prop-bar{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;
+  padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;
+  box-shadow:var(--shadow-sm);flex-wrap:wrap;}
+.prop-icon{width:44px;height:44px;background:var(--blue-light);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.prop-addr{font-weight:600;font-size:.95rem;color:var(--gray-900);}
+.prop-meta{font-size:.78rem;color:var(--gray-500);margin-top:.15rem;}
+.prop-status{margin-left:auto;display:flex;align-items:center;gap:.4rem;
+  background:var(--orange-light);border:1px solid rgba(234,88,12,.2);
+  border-radius:100px;padding:.35rem .9rem;font-size:.75rem;font-weight:600;color:var(--orange);}
+
+/* Free result card */
+.free-card{background:var(--white);border:1px solid var(--gray-200);border-radius:14px;
+  overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;}
+.free-card-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--gray-100);
+  display:flex;align-items:center;justify-content:space-between;}
+.free-card-title{font-weight:700;font-size:1rem;color:var(--gray-900);display:flex;align-items:center;gap:.5rem;}
+.free-tag{background:var(--green-light);color:var(--green);font-size:.65rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;padding:.2rem .6rem;border-radius:4px;}
+
+/* Check rows */
+.check-row{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.5rem;
+  border-bottom:1px solid var(--gray-100);}
+.check-row:last-child{border-bottom:none;}
+.cr-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.cr-icon.green{background:var(--green-light);}
+.cr-icon.red{background:var(--red-light);}
+.cr-icon.orange{background:var(--orange-light);}
+.cr-icon.gray{background:var(--gray-100);}
+.cr-info{flex:1;}
+.cr-title{font-size:.9rem;font-weight:600;color:var(--gray-900);}
+.cr-sub{font-size:.76rem;color:var(--gray-500);margin-top:.1rem;}
+.cr-result{text-align:right;}
+.result-pill{display:inline-flex;align-items:center;gap:.3rem;border-radius:100px;
+  padding:.3rem .75rem;font-size:.75rem;font-weight:700;}
+.pill-green{background:var(--green-light);color:var(--green);}
+.pill-red{background:var(--red-light);color:var(--red);}
+.pill-orange{background:var(--orange-light);color:var(--orange);}
+.result-note{font-size:.72rem;color:var(--gray-400);margin-top:.2rem;}
+
+/* LOCKED SECTION */
+.locked-card{background:var(--white);border:1.5px dashed var(--gray-300);border-radius:14px;
+  padding:2.5rem;text-align:center;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.locked-card::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,.95));
+  pointer-events:none;}
+.locked-row{display:flex;align-items:center;gap:1rem;padding:.9rem 0;
+  border-bottom:1px solid var(--gray-100);filter:blur(3px);opacity:.5;}
+.locked-overlay{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:1.5rem;}
+.lock-icon{font-size:2.5rem;margin-bottom:.75rem;}
+.lock-title{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;
+  color:var(--gray-900);margin-bottom:.4rem;}
+.lock-sub{font-size:.85rem;color:var(--gray-500);margin-bottom:1.5rem;max-width:340px;line-height:1.6;}
+.risk-score-free{display:inline-flex;align-items:center;justify-content:center;
+  background:var(--orange-light);border:2px solid rgba(234,88,12,.25);border-radius:12px;
+  padding:.6rem 1.4rem;margin-bottom:1.2rem;}
+.rs-label{font-size:.72rem;color:var(--gray-500);margin-bottom:.1rem;}
+.rs-val{font-family:'Poppins',sans-serif;font-size:1.5rem;font-weight:800;color:var(--orange);}
+.rs-desc{font-size:.72rem;color:var(--gray-500);}
+
+/* UNLOCK PLANS */
+.unlock-section{margin-bottom:2rem;}
+.unlock-title{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;
+  color:var(--gray-900);margin-bottom:.35rem;}
+.unlock-sub{font-size:.85rem;color:var(--gray-500);margin-bottom:1.5rem;}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.plan-card{background:var(--white);border:1.5px solid var(--gray-200);border-radius:12px;
+  padding:1.5rem;position:relative;transition:all .2s;cursor:pointer;}
+.plan-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:var(--shadow);}
+.plan-card.popular{border-color:var(--blue);background:linear-gradient(135deg,#EEF3FF,var(--white));}
+.popular-tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--blue);color:var(--white);font-size:.62rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;padding:.25rem .8rem;border-radius:100px;
+  white-space:nowrap;}
+.plan-name{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;
+  color:var(--gray-500);margin-bottom:.6rem;}
+.plan-price{font-family:'Poppins',sans-serif;font-size:2.2rem;font-weight:800;
+  color:var(--gray-900);line-height:1;}
+.plan-price sup{font-size:1rem;}
+.plan-desc{font-size:.72rem;color:var(--gray-500);margin:.3rem 0 1rem;}
+.plan-features{list-style:none;margin-bottom:1.2rem;display:flex;flex-direction:column;gap:.5rem;}
+.plan-features li{font-size:.78rem;color:var(--gray-700);display:flex;align-items:flex-start;gap:.4rem;}
+.plan-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+.btn-unlock{width:100%;padding:.75rem;border-radius:7px;font-family:'Inter',sans-serif;
+  font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;border:none;}
+.btn-outline-u{background:none;border:1.5px solid var(--gray-300) !important;color:var(--gray-700);}
+.btn-outline-u:hover{border-color:var(--blue) !important;color:var(--blue);}
+.btn-blue-u{background:var(--blue);color:var(--white);}
+.btn-blue-u:hover{background:var(--blue-dark);}
+
+/* LOADING */
+#loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);z-index:999;
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;}
+#loading-overlay.show{display:flex;}
+.spinner{width:52px;height:52px;border:4px solid var(--gray-200);
+  border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;color:var(--gray-900);}
+.loading-sub{font-size:.82rem;color:var(--gray-500);}
+.progress-bar{width:260px;height:5px;background:var(--gray-200);border-radius:100px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--blue);border-radius:100px;width:0%;transition:width .3s;}
+.step-indicator{font-size:.78rem;color:var(--blue);font-weight:600;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;gap:2.5rem;}
+  .steps{grid-template-columns:repeat(2,1fr);}
+  .step-arrow{display:none;}
+  .plans-grid{grid-template-columns:1fr;}
+  .ft-grid{grid-template-columns:1fr 1fr;}
+  .ft-bottom{flex-direction:column;text-align:center;}
+}
+@media(max-width:640px){
+  .nav-links,.nav-wa{display:none;}
+  .hbg{display:flex;}
+  .mob-menu{display:flex;}
+  .hero{padding:80px 5% 50px;min-height:auto;}
+  .steps{grid-template-columns:1fr;}
+  .plans-grid{grid-template-columns:1fr;}
+  .ft-grid{grid-template-columns:1fr;}
+  .result-page{padding:75px 4% 50px;}
+  .check-row{flex-wrap:wrap;gap:.75rem;}
+  .cr-result{text-align:left;}
+  .prop-bar{flex-direction:column;align-items:flex-start;}
+  .prop-status{margin-left:0;}
+  .trust-strip{gap:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo" onclick="showLanding()">
+    <div class="logo-icon">🛡</div>
+    <div>
+      <div class="logo-text">SAFE<span>X</span></div>
+      <span class="logo-sub">Safe Property. Secure Future.</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#" onclick="showLanding()">Check Property</a></li>
+    <li><a href="#footer">About</a></li>
+  </ul>
+  <a href="https://wa.me/919999999999" class="nav-wa">
+    <span>📱</span> WhatsApp Us
+  </a>
+  <button class="hbg" id="hbg"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="#how" onclick="closeMob()">How It Works</a>
+  <a href="#" onclick="showLanding();closeMob()">Check Property</a>
+  <a href="#footer" onclick="closeMob()">About</a>
+  <a href="https://wa.me/919999999999" style="color:#25D366;font-weight:600;">📱 WhatsApp Us →</a>
+</div>
+
+<!-- LOADING -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div>
+    <div class="loading-text">Scanning Property...</div>
+    <div class="loading-sub" id="loading-step">Connecting to RERA database...</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="step-indicator" id="step-indicator">Step 1 of 4</div>
+</div>
+
+<!-- ═══════════ PAGE 1: LANDING ═══════════ -->
+<div id="page-landing">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge"><div class="badge-dot"></div>India's Most Trusted Property Verification Service</div>
+        <h1 class="hero-h1">Apni Property ka<br/><span class="hl">Fraud Check</span> Karo</h1>
+        <p class="hero-p">RERA, Court Case, Ownership, Encumbrance — sab kuch ek report mein. <strong style="color:#fff">Safe raho, Smart decision lo.</strong></p>
+        <div class="hero-tags">
+          <div class="h-tag"><span class="h-tag-icon">✅</span> 1000+ Properties Verified</div>
+          <div class="h-tag"><span class="h-tag-icon">🎯</span> 99% Accurate Reports</div>
+          <div class="h-tag"><span class="h-tag-icon">🔒</span> Secure & Confidential</div>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <div class="check-card">
+        <div class="cc-title">Start Your Property Check</div>
+        <div class="cc-sub">Fill details below to get your free preview</div>
+
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">👤</span>
+            <input class="f-input" placeholder="Rahul Sharma" id="f-name"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mobile Number</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">📱</span>
+            <input class="f-input" placeholder="+91 98765 43210" id="f-phone"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Property State</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">📍</span>
+            <select class="f-select" id="f-state">
+              <option value="">Select State</option>
+              <option>Maharashtra</option><option>Delhi</option><option>Karnataka</option>
+              <option>Telangana</option><option>Tamil Nadu</option><option>Gujarat</option>
+              <option>Uttar Pradesh</option><option>Haryana</option><option>Rajasthan</option>
+              <option>West Bengal</option><option>Punjab</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Plot / Property Number or Address</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">🏠</span>
+            <input class="f-input" placeholder="e.g. Plot 42, Koramangala, Bangalore" id="f-prop"/>
+          </div>
+        </div>
+
+        <button class="btn-submit" onclick="runCheck()">
+          🛡 &nbsp;Check Now — <strong>FREE Preview</strong>
+        </button>
+        <div class="cc-foot">
+          🔒 Secure &nbsp;•&nbsp; ⚡ Instant &nbsp;•&nbsp; 📲 WhatsApp Delivery
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CITY STRIP -->
+  <div class="trust-strip">
+    <span class="ts-label">Trusted Across</span>
+    <div class="ts-div"></div>
+    <span class="city-item">🏙 Mumbai</span>
+    <span class="city-item">🏙 Delhi NCR</span>
+    <span class="city-item">🏙 Bangalore</span>
+    <span class="city-item">🏙 Pune</span>
+    <span class="city-item">🏙 Hyderabad</span>
+    <span class="city-item">🏙 Chennai</span>
+    <span class="city-item">🏙 Ahmedabad</span>
+    <span class="city-item">🏙 Kolkata</span>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-sec" id="how">
+    <div class="sec-center">
+      <div class="sec-badge">Process</div>
+      <h2 class="sec-h">How It <span>Works?</span></h2>
+      <p class="sec-p">4 simple steps — property check in under 60 seconds</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-ico">📝</div>
+        <div class="step-t">Enter Details</div>
+        <p class="step-d">Fill property details — address, state, plot number. Takes 30 seconds.</p>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-ico">🔍</div>
+        <div class="step-t">We Verify</div>
+        <p class="step-d">Our AI checks 15+ government databases simultaneously — RERA, eCourts, Sub-Registrar.</p>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-ico">📊</div>
+        <div class="step-t">Free Preview</div>
+        <p class="step-d">See basic results for free — RERA status, court flag, partial fraud score.</p>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-ico">📲</div>
+        <div class="step-t">Full Report</div>
+        <p class="step-d">Unlock complete report — delivered on WhatsApp + Email as PDF.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="ft-grid">
+      <div>
+        <div class="ft-brand">SAFE<span>X</span></div>
+        <p class="ft-tag">India's most trusted property verification platform. Safe raho, Smart decision lo.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Quick Links</h4>
+        <a href="#how">How It Works</a>
+        <a href="#">Blog</a>
+        <a href="#">About Us</a>
+      </div>
+      <div class="ft-col">
+        <h4>Support</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+      <div class="ft-col">
+        <h4>Get In Touch</h4>
+        <div class="ft-contact">📱 +91 98765 43210</div>
+        <div class="ft-contact">📧 hello@safex.in</div>
+        <div class="ft-contact">🕐 Mon–Sat: 10AM – 7PM</div>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <p>© 2025 SAFEX Technologies. All rights reserved.</p>
+      <p>Made with ❤️ in India 🇮🇳</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════ PAGE 2: RESULT ═══════════ -->
+<div id="page-result">
+  <div class="result-page">
+
+    <!-- Header -->
+    <div class="result-header">
+      <button class="back-btn" onclick="showLanding()">← Back</button>
+      <div>
+        <div class="result-title">Property Check Results</div>
+        <div class="result-subtitle">Free preview — 2 of 6 checks shown</div>
+      </div>
+    </div>
+
+    <!-- Property Info -->
+    <div class="prop-bar">
+      <div class="prop-icon">🏠</div>
+      <div>
+        <div class="prop-addr" id="result-addr">—</div>
+        <div class="prop-meta" id="result-meta">—</div>
+      </div>
+      <div class="prop-status">⚠️ Partial Scan Complete</div>
+    </div>
+
+    <!-- FREE RESULTS -->
+    <div class="free-card">
+      <div class="free-card-header">
+        <div class="free-card-title">🆓 Free Checks <span class="free-tag">FREE</span></div>
+        <div style="font-size:.78rem;color:var(--gray-400);">2 of 6 checks</div>
+      </div>
+
+      <!-- Check 1: RERA -->
+      <div class="check-row">
+        <div class="cr-icon green">🏛</div>
+        <div class="cr-info">
+          <div class="cr-title">RERA Registration</div>
+          <div class="cr-sub" id="rera-sub">Checking builder/project on RERA portal</div>
+        </div>
+        <div class="cr-result">
+          <div class="result-pill pill-green" id="rera-result">✓ Registered</div>
+          <div class="result-note">Maharashtra RERA</div>
+        </div>
+      </div>
+
+      <!-- Check 2: Court -->
+      <div class="check-row">
+        <div class="cr-icon orange" id="court-icon">⚖️</div>
+        <div class="cr-info">
+          <div class="cr-title">Court Case Check</div>
+          <div class="cr-sub" id="court-sub">Scanning district courts & high courts</div>
+        </div>
+        <div class="cr-result">
+          <div class="result-pill pill-orange" id="court-result">⚠ 1 Case Found</div>
+          <div class="result-note" id="court-note">2019 — Ongoing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RISK SCORE TEASER -->
+    <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:14px;
+      padding:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem;
+      box-shadow:var(--shadow-sm);flex-wrap:wrap;">
+      <div style="text-align:center;min-width:90px;">
+        <div style="font-size:.7rem;color:var(--gray-500);text-transform:uppercase;
+          letter-spacing:1px;margin-bottom:.3rem;">Risk Score</div>
+        <div style="font-family:'Poppins',sans-serif;font-size:2.8rem;font-weight:800;
+          color:var(--orange);line-height:1;">62</div>
+        <div style="font-size:.7rem;color:var(--orange);font-weight:600;">Medium Risk</div>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-weight:600;font-size:.95rem;color:var(--gray-900);margin-bottom:.3rem;">
+          ⚠️ Attention Needed
+        </div>
+        <div style="font-size:.83rem;color:var(--gray-500);line-height:1.6;">
+          Our AI found <strong style="color:var(--orange)">3 risk signals</strong> in this property.
+          Unlock full report to see ownership history, encumbrance status, and detailed fraud analysis.
+        </div>
+      </div>
+    </div>
+
+    <!-- LOCKED SECTION -->
+    <div style="position:relative;margin-bottom:1.5rem;">
+      <!-- Blurred rows behind -->
+      <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:14px;
+        overflow:hidden;filter:blur(4px);opacity:.4;pointer-events:none;">
+        <div class="check-row"><div class="cr-icon gray">📜</div><div class="cr-info"><div class="cr-title">Ownership History</div><div class="cr-sub">30 year chain of title</div></div><div class="cr-result"><div class="result-pill" style="background:#F1F5F9;color:#64748B;">Checking...</div></div></div>
+        <div class="check-row"><div class="cr-icon gray">🏦</div><div class="cr-info"><div class="cr-title">Encumbrance Certificate</div><div class="cr-sub">Loan & legal dues</div></div><div class="cr-result"><div class="result-pill" style="background:#F1F5F9;color:#64748B;">Checking...</div></div></div>
+        <div class="check-row"><div class="cr-icon gray">💰</div><div class="cr-info"><div class="cr-title">Property Valuation</div><div class="cr-sub">Current market value</div></div><div class="cr-result"><div class="result-pill" style="background:#F1F5F9;color:#64748B;">Checking...</div></div></div>
+        <div class="check-row"><div class="cr-icon gray">👨‍💼</div><div class="cr-info"><div class="cr-title">Expert Analysis</div><div class="cr-sub">Legal expert verdict</div></div><div class="cr-result"><div class="result-pill" style="background:#F1F5F9;color:#64748B;">Pending...</div></div></div>
+      </div>
+      <!-- Lock overlay -->
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;
+        align-items:center;justify-content:center;padding:2rem;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:.6rem;">🔒</div>
+        <div style="font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:700;
+          color:var(--gray-900);margin-bottom:.4rem;">4 More Checks Locked</div>
+        <div style="font-size:.83rem;color:var(--gray-500);max-width:300px;line-height:1.6;">
+          Unlock full report to see Ownership History, Encumbrance, Valuation + Expert Analysis
+        </div>
+      </div>
+    </div>
+
+    <!-- UNLOCK PLANS -->
+    <div class="unlock-section">
+      <div class="unlock-title">Choose Your Plan to Unlock Full Report</div>
+      <div class="unlock-sub">One-time payment • Instant on WhatsApp • No subscription</div>
+      <div class="plans-grid">
+
+        <!-- Basic -->
+        <div class="plan-card">
+          <div class="plan-name">Basic</div>
+          <div class="plan-price"><sup>₹</sup>199</div>
+          <div class="plan-desc">One-time · Essential Checks</div>
+          <ul class="plan-features">
+            <li>RERA Check (Done ✓)</li>
+            <li>Court Case Check (Done ✓)</li>
+            <li>Ownership History</li>
+            <li>PDF Report (English)</li>
+            <li>WhatsApp Delivery</li>
+          </ul>
+          <button class="btn-unlock btn-outline-u" onclick="goPayment(199,'Basic')">Choose Basic</button>
+        </div>
+
+        <!-- Standard (Popular) -->
+        <div class="plan-card popular">
+          <div class="popular-tag">⭐ Most Popular</div>
+          <div class="plan-name">Standard</div>
+          <div class="plan-price"><sup>₹</sup>299</div>
+          <div class="plan-desc">One-time · Most Chosen</div>
+          <ul class="plan-features">
+            <li>Everything in Basic</li>
+            <li>Encumbrance Certificate</li>
+            <li>AI Fraud Score (Full)</li>
+            <li>Map Boundary Check</li>
+            <li>Hindi + English Report</li>
+          </ul>
+          <button class="btn-unlock btn-blue-u" onclick="goPayment(299,'Standard')">Choose Standard</button>
+        </div>
+
+        <!-- Full Shield -->
+        <div class="plan-card">
+          <div class="plan-name">Full Shield</div>
+          <div class="plan-price"><sup>₹</sup>499</div>
+          <div class="plan-desc">One-time · Complete Protection</div>
+          <ul class="plan-features">
+            <li>Everything in Standard</li>
+            <li>30-min Expert Call</li>
+            <li>Property Valuation</li>
+            <li>Court-Ready Document</li>
+            <li>Re-check in 7 Days</li>
+          </ul>
+          <button class="btn-unlock btn-outline-u" onclick="goPayment(499,'Full Shield')">Choose Full Shield</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WhatsApp CTA -->
+    <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid rgba(22,163,74,.2);
+      border-radius:12px;padding:1.5rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;">
+      <div style="font-size:2rem;">📱</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:.95rem;color:var(--gray-900);margin-bottom:.2rem;">
+          Koi sawaal hai? WhatsApp karo!
+        </div>
+        <div style="font-size:.82rem;color:var(--gray-500);">
+          Mon–Sat 10AM–7PM · Usually replies in 5 minutes
+        </div>
+      </div>
+      <a href="https://wa.me/919999999999" style="display:inline-flex;align-items:center;gap:.5rem;
+        background:#25D366;color:var(--white);padding:.7rem 1.3rem;border-radius:8px;
+        font-weight:700;font-size:.85rem;text-decoration:none;white-space:nowrap;transition:all .2s;">
+        💬 WhatsApp Now
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// NAV
+const hbg=document.getElementById('hbg'),mob=document.getElementById('mobMenu');
+hbg.addEventListener('click',()=>{hbg.classList.toggle('open');mob.classList.toggle('show');});
+function closeMob(){hbg.classList.remove('open');mob.classList.remove('show');}
+
+function showLanding(){
+  document.getElementById('page-landing').style.display='block';
+  document.getElementById('page-result').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// LOADING SIMULATION
+const steps=[
+  {text:'Connecting to RERA database...',step:'Step 1 of 4',pct:20},
+  {text:'Scanning court records...',step:'Step 2 of 4',pct:45},
+  {text:'Checking ownership history...',step:'Step 3 of 4',pct:70},
+  {text:'Generating fraud risk score...',step:'Step 4 of 4',pct:95},
+];
+
+function runCheck(){
+  const name=document.getElementById('f-name').value.trim();
+  const phone=document.getElementById('f-phone').value.trim();
+  const state=document.getElementById('f-state').value;
+  const prop=document.getElementById('f-prop').value.trim();
+  if(!name||!phone||!state||!prop){
+    alert('Please fill all fields to proceed.');return;
+  }
+
+  // Store for result page
+  document.getElementById('result-addr').textContent=prop;
+  document.getElementById('result-meta').textContent=name+' · '+phone+' · '+state;
+
+  // Show loading
+  const overlay=document.getElementById('loading-overlay');
+  const fill=document.getElementById('progress-fill');
+  const stepEl=document.getElementById('loading-step');
+  const stepInd=document.getElementById('step-indicator');
+  overlay.classList.add('show');
+
+  let i=0;
+  function nextStep(){
+    if(i>=steps.length){
+      setTimeout(()=>{
+        overlay.classList.remove('show');
+        fill.style.width='0%';
+        document.getElementById('page-landing').style.display='none';
+        document.getElementById('page-result').style.display='block';
+        window.scrollTo({top:0,behavior:'smooth'});
+      },500);
+      return;
+    }
+    stepEl.textContent=steps[i].text;
+    stepInd.textContent=steps[i].step;
+    fill.style.width=steps[i].pct+'%';
+    i++;
+    setTimeout(nextStep,900);
+  }
+  nextStep();
+}
+
+function goPayment(amount,plan){
+  alert('💳 Redirecting to payment...\n\nPlan: '+plan+'\nAmount: ₹'+amount+'\n\n(Razorpay integration coming soon!)');
+}
+
+// Close mob menu on link click
+document.querySelectorAll('.mob-menu a').forEach(a=>a.addEventListener('click',closeMob));
+</script>
+</body>
+</html>
