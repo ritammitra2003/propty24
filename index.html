@@ -665,39 +665,48 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
         <!-- Basic -->
         <div class="plan-card">
           <div class="plan-name">Basic</div>
-          <div class="plan-price" style="color:var(--green)">FREE</div>
-          <div class="plan-desc" style="color:var(--green);font-weight:600;">🎉 Free for limited time!</div>
+          <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
+            <span style="font-size:1rem;color:var(--gray-400);text-decoration:line-through;font-weight:500;">₹398</span>
+            <span class="plan-price" style="color:var(--blue)"><sup>₹</sup>199</span>
+          </div>
+          <div class="plan-desc" style="color:var(--green);font-weight:700;">🎉 50% OFF — Limited Time!</div>
           <ul class="plan-features">
-            <li>RERA Check (Done ✓)</li>
-            <li>Court Case Check (Done ✓)</li>
             <li>Ownership History</li>
+            <li>Court Case Check</li>
+            <li>RERA Status</li>
             <li>PDF Report (English)</li>
             <li>WhatsApp Delivery</li>
           </ul>
-          <button class="btn-unlock btn-outline-u" onclick="goGetReport('Basic')">Get Free Report</button>
+          <button class="btn-unlock btn-outline-u" onclick="goGetReport('Basic', 199)">Get Report — ₹199</button>
         </div>
 
         <!-- Standard (Popular) -->
         <div class="plan-card popular">
           <div class="popular-tag">⭐ Most Popular</div>
           <div class="plan-name">Standard</div>
-          <div class="plan-price" style="color:var(--green)">FREE</div>
-          <div class="plan-desc" style="color:var(--green);font-weight:600;">🎉 Free for limited time!</div>
+          <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
+            <span style="font-size:1rem;color:var(--gray-400);text-decoration:line-through;font-weight:500;">₹598</span>
+            <span class="plan-price" style="color:var(--blue)"><sup>₹</sup>299</span>
+          </div>
+          <div class="plan-desc" style="color:var(--green);font-weight:700;">🎉 50% OFF — Limited Time!</div>
           <ul class="plan-features">
             <li>Everything in Basic</li>
             <li>Encumbrance Certificate</li>
-            <li>AI Fraud Score (Full)</li>
             <li>Map Boundary Check</li>
             <li>Hindi + English Report</li>
+            <li>Priority Processing</li>
           </ul>
-          <button class="btn-unlock btn-blue-u" onclick="goGetReport('Standard')">Get Free Report ⭐</button>
+          <button class="btn-unlock btn-blue-u" onclick="goGetReport('Standard', 299)">Get Report — ₹299 ⭐</button>
         </div>
 
         <!-- Full Shield -->
         <div class="plan-card">
           <div class="plan-name">Full Shield</div>
-          <div class="plan-price" style="color:var(--green)">FREE</div>
-          <div class="plan-desc" style="color:var(--green);font-weight:600;">🎉 Free for limited time!</div>
+          <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
+            <span style="font-size:1rem;color:var(--gray-400);text-decoration:line-through;font-weight:500;">₹998</span>
+            <span class="plan-price" style="color:var(--blue)"><sup>₹</sup>499</span>
+          </div>
+          <div class="plan-desc" style="color:var(--green);font-weight:700;">🎉 50% OFF — Limited Time!</div>
           <ul class="plan-features">
             <li>Everything in Standard</li>
             <li>30-min Expert Call</li>
@@ -705,7 +714,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
             <li>Court-Ready Document</li>
             <li>Re-check in 7 Days</li>
           </ul>
-          <button class="btn-unlock btn-outline-u" onclick="goGetReport('Full Shield')">Get Free Report</button>
+          <button class="btn-unlock btn-outline-u" onclick="goGetReport('Full Shield', 499)">Get Report — ₹499</button>
         </div>
 
       </div>
@@ -834,18 +843,19 @@ function runCheck(){
 
 const API_URL = 'https://propty24backend.ritammitra2003.workers.dev';
 
-async function goGetReport(plan) {
+async function goGetReport(plan, amount) {
   const ud = window._userData;
   if(!ud){ alert('Please fill the form first.'); showLanding(); return; }
   document.getElementById('email-modal').style.display='flex';
-  document.getElementById('modal-plan').textContent = plan;
+  document.getElementById('modal-plan').textContent = plan + ' — ₹' + amount;
+  document.getElementById('modal-plan-amount').textContent = amount;
   document.getElementById('modal-name').value='';
   document.getElementById('modal-phone').value='';
   document.getElementById('modal-email').value='';
-  document.getElementById('modal-confirm-btn').onclick = () => submitReport(plan);
+  document.getElementById('modal-confirm-btn').onclick = () => submitReport(plan, amount);
 }
 
-async function submitReport(plan) {
+async function submitReport(plan, amount) {
   const ud = window._userData;
   const name=document.getElementById('modal-name').value.trim();
   const phone=document.getElementById('modal-phone').value.trim();
@@ -855,10 +865,10 @@ async function submitReport(plan) {
   ud.name=name; ud.phone=phone; ud.email=email;
   const btn = document.getElementById('modal-confirm-btn');
   btn.disabled = true;
-  btn.textContent = 'Sending...';
+  btn.textContent = 'Saving...';
 
   try {
-    const res = await fetch(API_URL + '/api/create-order', {
+    await fetch(API_URL + '/api/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -867,30 +877,44 @@ async function submitReport(plan) {
         email: ud.email,
         property_address: ud.fullAddress,
         plan: plan,
-        amount: 0
+        amount: amount
       })
     });
-    
-    document.getElementById('email-modal').style.display='none';
-    showThankYouPage(plan);
+  } catch(err) { /* continue anyway */ }
 
-  } catch(err) {
-    document.getElementById('email-modal').style.display='none';
-    showThankYouPage(plan);
-  }
+  document.getElementById('email-modal').style.display='none';
+
+  // WhatsApp message to admin
+  const now = new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true,
+    day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  const waMsg = encodeURIComponent(
+`🏠 *New PROPTY24 Request!*
+
+👤 *Name:* ${name}
+📱 *Phone:* ${phone}
+📧 *Email:* ${email}
+🏘 *Property:* ${ud.fullAddress}
+📋 *Plan:* ${plan} (₹${amount})
+⏰ *Time:* ${now}
+
+_Please send payment QR and verify._`
+  );
+  window.open('https://wa.me/917384949090?text=' + waMsg, '_blank');
+
+  showThankYouPage(plan, amount);
 }
 
-function showThankYouPage(plan) {
+function showThankYouPage(plan, amount) {
   document.getElementById('page-landing').style.display='none';
   document.getElementById('page-result').style.display='none';
   document.getElementById('page-thankyou').style.display='block';
-  document.getElementById('ty-plan').textContent = plan;
+  document.getElementById('ty-plan').textContent = plan + ' — ₹' + amount;
   document.getElementById('ty-email').textContent = window._userData.email;
   document.getElementById('ty-name').textContent = window._userData.name;
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function goPayment(amount,plan){ goGetReport(plan); }
+function goPayment(amount,plan){ goGetReport(plan, amount); }
 
 
 // ── LOCALITY / NEARBY PLACES ──
@@ -963,7 +987,7 @@ document.querySelectorAll('.mob-menu a').forEach(a=>a.addEventListener('click',c
     <div style="font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;
       color:#0F172A;text-align:center;margin-bottom:.25rem;">Aapki Details Bharo</div>
     <div style="font-size:.8rem;color:#64748B;text-align:center;margin-bottom:1.2rem;">
-      Report aapke email pe bheja jaayega — <strong id="modal-plan"></strong> plan
+      Report aapke email pe bheja jaayega — <strong id="modal-plan"></strong><span id="modal-plan-amount" style="display:none"></span>
     </div>
 
     <div style="margin-bottom:.75rem;">
