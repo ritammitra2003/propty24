@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PROPTY24 — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --blue:#1B4FD8;--blue-dark:#1340B0;--blue-light:#EEF3FF;
+  --green:#16A34A;--green-light:#DCFCE7;
+  --orange:#EA580C;--orange-light:#FFF7ED;
+  --red:#DC2626;--red-light:#FEE2E2;
+  --gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;
+  --gray-400:#94A3B8;--gray-500:#64748B;--gray-700:#334155;--gray-900:#0F172A;
+  --white:#FFFFFF;
+}
+body{font-family:"Inter",sans-serif;background:var(--gray-50);color:var(--gray-900);}
+
+/* LOGIN */
+#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;}
+.login-card{background:var(--white);border-radius:16px;padding:2.5rem;max-width:380px;width:100%;
+  box-shadow:0 16px 48px rgba(0,0,0,.12);}
+.login-logo{font-family:"Poppins",sans-serif;font-size:1.5rem;font-weight:800;color:var(--gray-900);
+  text-align:center;margin-bottom:.25rem;}
+.login-logo span{color:var(--blue);}
+.login-sub{text-align:center;color:var(--gray-500);font-size:.85rem;margin-bottom:2rem;}
+.inp{width:100%;padding:.8rem 1rem;border:1.5px solid var(--gray-200);border-radius:8px;
+  font-family:"Inter",sans-serif;font-size:.95rem;outline:none;transition:border .2s;margin-bottom:.75rem;}
+.inp:focus{border-color:var(--blue);}
+.btn{width:100%;padding:.85rem;background:var(--blue);color:var(--white);border:none;
+  border-radius:8px;font-family:"Inter",sans-serif;font-weight:700;font-size:1rem;
+  cursor:pointer;transition:background .2s;}
+.btn:hover{background:var(--blue-dark);}
+.btn:disabled{background:var(--gray-400);cursor:not-allowed;}
+.step-label{font-size:.78rem;color:var(--gray-500);margin-bottom:.75rem;text-align:center;}
+
+/* MAIN */
+#main-page{display:none;}
+header{background:var(--white);border-bottom:1px solid var(--gray-200);padding:1rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.header-logo{font-family:"Poppins",sans-serif;font-size:1.2rem;font-weight:800;color:var(--gray-900);}
+.header-logo span{color:var(--blue);}
+.header-right{display:flex;align-items:center;gap:1rem;}
+.badge-count{background:var(--blue-light);color:var(--blue);font-size:.75rem;font-weight:700;
+  padding:.25rem .7rem;border-radius:100px;}
+.logout-btn{background:none;border:1.5px solid var(--gray-200);color:var(--gray-500);
+  padding:.4rem .9rem;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;}
+.container{max-width:1200px;margin:0 auto;padding:2rem;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+.stat-card{background:var(--white);border:1px solid var(--gray-200);border-radius:12px;padding:1.25rem;}
+.stat-num{font-family:"Poppins",sans-serif;font-size:2rem;font-weight:800;color:var(--gray-900);}
+.stat-label{font-size:.78rem;color:var(--gray-500);margin-top:.25rem;}
+.section-title{font-family:"Poppins",sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:1rem;
+  display:flex;align-items:center;justify-content:space-between;}
+.refresh-btn{background:var(--blue-light);color:var(--blue);border:none;padding:.4rem .9rem;
+  border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;}
+.orders-table{width:100%;border-collapse:collapse;background:var(--white);
+  border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.orders-table th{background:var(--gray-50);padding:.85rem 1rem;text-align:left;
+  font-size:.72rem;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;
+  border-bottom:1px solid var(--gray-200);}
+.orders-table td{padding:.9rem 1rem;border-bottom:1px solid var(--gray-100);font-size:.85rem;
+  color:var(--gray-700);vertical-align:middle;}
+.orders-table tr:last-child td{border-bottom:none;}
+.orders-table tr:hover td{background:var(--gray-50);}
+.send-btn{background:var(--blue);color:var(--white);border:none;padding:.45rem .9rem;
+  border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;white-space:nowrap;}
+.send-btn:hover{background:var(--blue-dark);}
+.sent-label{color:var(--green);font-size:.78rem;font-weight:600;}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;
+  align-items:center;justify-content:center;padding:1rem;}
+.modal-bg.show{display:flex;}
+.modal{background:var(--white);border-radius:16px;padding:2rem;max-width:640px;width:100%;
+  max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.25);}
+.modal-title{font-family:"Poppins",sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:.25rem;}
+.modal-sub{font-size:.82rem;color:var(--gray-500);margin-bottom:1.5rem;}
+.prop-info{background:var(--blue-light);border-radius:8px;padding:1rem;margin-bottom:1.5rem;}
+.prop-info p{font-size:.85rem;color:var(--blue-dark);font-weight:600;margin-bottom:.25rem;}
+.prop-info span{font-weight:400;color:var(--blue);}
+.field-group{margin-bottom:1rem;}
+.field-label{font-size:.72rem;font-weight:700;color:var(--gray-700);text-transform:uppercase;
+  letter-spacing:.5px;display:block;margin-bottom:.35rem;}
+.field-inp{width:100%;padding:.75rem .9rem;border:1.5px solid var(--gray-200);border-radius:8px;
+  font-family:"Inter",sans-serif;font-size:.88rem;outline:none;transition:border .2s;background:var(--gray-50);}
+.field-inp:focus{border-color:var(--blue);background:var(--white);}
+textarea.field-inp{resize:vertical;min-height:80px;}
+.modal-actions{display:flex;gap:.75rem;margin-top:1.5rem;}
+.btn-send{flex:1;padding:.85rem;background:var(--blue);color:var(--white);border:none;
+  border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;}
+.btn-send:hover{background:var(--blue-dark);}
+.btn-cancel{padding:.85rem 1.5rem;background:none;border:1.5px solid var(--gray-200);
+  color:var(--gray-500);border-radius:8px;font-weight:600;font-size:.9rem;cursor:pointer;}
+.site-link{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:.75rem;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:8px;
+  text-decoration:none;color:var(--gray-900);font-size:.82rem;font-weight:600;text-align:center;transition:all .2s;}
+.site-link:hover{border-color:var(--blue);background:var(--blue-light);color:var(--blue);}
+.site-link span{font-size:.7rem;font-weight:400;color:var(--gray-400);margin-top:.2rem;}
+.site-section{border:1px solid var(--gray-200);border-radius:10px;overflow:hidden;margin-bottom:1rem;}
+.site-section-header{padding:.75rem 1rem;font-size:.82rem;font-weight:700;color:var(--gray-900);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.3rem;}
+.site-section .field-group{padding:0 1rem;margin-bottom:.85rem;}
+.site-section .field-group:first-of-type{margin-top:.75rem;}
+.loading{text-align:center;padding:3rem;color:var(--gray-400);}
+.empty{text-align:center;padding:3rem;color:var(--gray-400);}
+@media(max-width:768px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .orders-table{display:block;overflow-x:auto;}
+  .container{padding:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-logo">PROPTY<span>24</span></div>
+    <div class="login-sub">Admin Panel — Secure Access</div>
+
+    <!-- Step 1: Email + Password -->
+    <div id="step-password">
+      <div class="step-label">Step 1 of 2 — Email & Password</div>
+      <input class="inp" type="email" id="admin-email-inp" placeholder="Admin email daalo"
+        onkeydown="if(event.key==='Enter')document.getElementById('admin-pass-inp').focus()"/>
+      <input class="inp" type="password" id="admin-pass-inp" placeholder="Password daalo"
+        onkeydown="if(event.key==='Enter')doStep1()"/>
+      <button class="btn" onclick="doStep1()">Next →</button>
+    </div>
+
+    <!-- Step 2: OTP -->
+    <div id="step-otp" style="display:none;">
+      <div class="step-label">Step 2 of 2 — OTP Verification</div>
+      <div style="background:var(--blue-light);border-radius:8px;padding:.75rem;font-size:.82rem;
+        color:var(--blue);margin-bottom:.75rem;text-align:center;">
+        📧 OTP bheja gaya aapki email pe
+      </div>
+      <input class="inp" type="tel" id="admin-otp-inp" placeholder="6-digit OTP daalo"
+        maxlength="6" onkeydown="if(event.key==='Enter')doStep2()"/>
+      <button class="btn" id="otp-btn" onclick="doStep2()">🔐 Login</button>
+      <button onclick="goBackToStep1()"
+        style="width:100%;background:none;border:none;color:var(--gray-400);
+        font-size:.8rem;margin-top:.75rem;cursor:pointer;padding:.5rem;">
+        ← Back
+      </button>
+    </div>
+
+    <div id="login-err" style="color:var(--red);font-size:.82rem;text-align:center;
+      margin-top:.75rem;display:none;padding:.5rem;background:var(--red-light);border-radius:6px;"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main-page">
+  <header>
+    <div class="header-logo">PROPTY<span>24</span> Admin</div>
+    <div class="header-right">
+      <span class="badge-count" id="pending-count">0 Pending</span>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </header>
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-label">Total Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-pending" style="color:var(--blue)">0</div>
+        <div class="stat-label">Pending Reports</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-sent" style="color:var(--green)">0</div>
+        <div class="stat-label">Reports Sent</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-revenue" style="color:var(--orange)">₹0</div>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+    </div>
+    <div class="section-title">
+      📋 All Orders
+      <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh</button>
+    </div>
+    <div id="orders-container">
+      <div class="loading">Loading orders...</div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="modal-bg" id="report-modal">
+  <div class="modal">
+    <div class="modal-title">📋 Report Bhejo</div>
+    <div class="modal-sub">Sab fields fill karo — phir Send dabao</div>
+    <div class="prop-info">
+      <p>👤 Customer: <span id="m-name"></span></p>
+      <p>📧 Email: <span id="m-email"></span></p>
+      <p>🏠 Property: <span id="m-address"></span></p>
+      <p>🆔 Report ID: <span id="m-reportid"></span></p>
+    </div>
+    <div style="margin-bottom:1.5rem;">
+      <div style="font-size:.72rem;font-weight:700;color:var(--gray-700);text-transform:uppercase;
+        letter-spacing:.5px;margin-bottom:.6rem;">🔗 Verification Sites</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+        <a href="https://banglarbhumi.gov.in" target="_blank" class="site-link">🏠 Banglarbhumi<br/><span>Ownership & Plot</span></a>
+        <a href="https://igrsWB.gov.in" target="_blank" class="site-link">📜 IGRWB<br/><span>Deed Registration</span></a>
+        <a href="https://ecourts.gov.in/ecourts_home/" target="_blank" class="site-link">⚖️ eCourts<br/><span>Court Cases</span></a>
+        <a href="https://wbrera.in" target="_blank" class="site-link">🏛 WBRERA<br/><span>Builder Check</span></a>
+      </div>
+    </div>
+    <div class="site-section">
+      <div class="site-section-header" style="background:#EEF3FF;border-left:3px solid var(--blue);">
+        🏠 Banglarbhumi — Ownership Data
+      </div>
+      <div class="field-group">
+        <label class="field-label">👤 Owner Name</label>
+        <input class="field-inp" id="r-owner" placeholder="e.g. Ramesh Kumar Das"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">📜 Ownership / Khatian Details</label>
+        <textarea class="field-inp" id="r-ownership" placeholder="Khatian No, Plot No, Area..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">📸 Screenshot URL</label>
+        <input class="field-inp" id="r-bb-screenshot" placeholder="Imgur/Drive screenshot link"/>
+      </div>
+    </div>
+    <div class="site-section">
+      <div class="site-section-header" style="background:#FFF7ED;border-left:3px solid var(--orange);">
+        📜 IGRWB — Deed Registration
+      </div>
+      <div class="field-group">
+        <label class="field-label">🏦 Loan / Encumbrance Status</label>
+        <textarea class="field-inp" id="r-encumbrance" placeholder="Active loan hai ya nahi..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">📋 Deed / Transaction History</label>
+        <textarea class="field-inp" id="r-deed" placeholder="Last sale deed details..."></textarea>
+      </div>
+    </div>
+    <div class="site-section">
+      <div class="site-section-header" style="background:#FEE2E2;border-left:3px solid var(--red);">
+        ⚖️ eCourts — Court Cases
+      </div>
+      <div class="field-group">
+        <label class="field-label">⚖️ Court Case Details</label>
+        <textarea class="field-inp" id="r-court" placeholder="Koi case mila ya nahi..."></textarea>
+      </div>
+    </div>
+    <div class="site-section">
+      <div class="site-section-header" style="background:#DCFCE7;border-left:3px solid var(--green);">
+        🏛 WBRERA — Builder/Project Check
+      </div>
+      <div class="field-group">
+        <label class="field-label">🏛 RERA Status</label>
+        <input class="field-inp" id="r-rera" placeholder="Registered / N/A..."/>
+      </div>
+    </div>
+    <div class="site-section">
+      <div class="site-section-header" style="background:var(--gray-100);border-left:3px solid var(--gray-400);">
+        📝 Additional Info
+      </div>
+      <div class="field-group">
+        <label class="field-label">🗺 Map / Boundary Check</label>
+        <textarea class="field-inp" id="r-map" placeholder="Boundary clear hai ya nahi..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">📝 Team Remarks</label>
+        <textarea class="field-inp" id="r-remarks" placeholder="Extra notes..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">📎 PDF Report URL (Optional)</label>
+        <input class="field-inp" id="r-pdf" placeholder="PDF ka link..."/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">📸 Extra Screenshot URL (Optional)</label>
+        <input class="field-inp" id="r-screenshot" placeholder="Extra screenshot link..."/>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-send" id="send-btn" onclick="sendReport()">🚀 Report Send Karo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://propty24backend.ritammitra2003.workers.dev';
+let adminKey = '';
+let currentReportId = '';
+
+// ── STEP 1: Email + Password check ──
+async function doStep1(){
+  const email = document.getElementById('admin-email-inp').value.trim();
+  const pass = document.getElementById('admin-pass-inp').value.trim();
+  const err = document.getElementById('login-err');
+  
+  if(!email || !pass){
+    showErr('Email aur password dono daalo!');
+    return;
+  }
+  
+  const btn = document.querySelector('#step-password .btn');
+  btn.disabled = true;
+  btn.textContent = 'Checking...';
+  hideErr();
+
+  try{
+    const res = await fetch(API_URL+'/api/admin/send-otp', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+    if(data.success){
+      document.getElementById('step-password').style.display='none';
+      document.getElementById('step-otp').style.display='block';
+    } else {
+      showErr(data.error || 'Galat email ya password!');
+    }
+  }catch(e){
+    showErr('Network error — dobara try karo.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Next →';
+  }
+}
+
+// ── STEP 2: OTP verify ──
+async function doStep2(){
+  const otp = document.getElementById('admin-otp-inp').value.trim();
+  const pass = document.getElementById('admin-pass-inp').value.trim();
+  
+  if(!otp || otp.length !== 6){
+    showErr('6-digit OTP daalo!');
+    return;
+  }
+  hideErr();
+  
+  const btn = document.getElementById('otp-btn');
+  btn.disabled = true;
+  btn.textContent = 'Verifying...';
+
+  try{
+    const res = await fetch(API_URL+'/api/admin/verify-otp', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ password: pass, otp })
+    });
+    const data = await res.json();
+    if(data.success){
+      adminKey = data.admin_key;
+      loadOrders();
+    } else {
+      showErr(data.error || 'Galat OTP!');
+    }
+  }catch(e){
+    showErr('Network error — dobara try karo.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔐 Login';
+  }
+}
+
+function goBackToStep1(){
+  document.getElementById('step-otp').style.display='none';
+  document.getElementById('step-password').style.display='block';
+  document.getElementById('admin-otp-inp').value='';
+  hideErr();
+}
+
+function showErr(msg){
+  const err = document.getElementById('login-err');
+  err.style.display='block';
+  err.textContent = msg;
+}
+
+function hideErr(){
+  document.getElementById('login-err').style.display='none';
+}
+
+function doLogout(){
+  adminKey='';
+  document.getElementById('main-page').style.display='none';
+  document.getElementById('login-page').style.display='flex';
+  document.getElementById('admin-email-inp').value='';
+  document.getElementById('admin-pass-inp').value='';
+  document.getElementById('admin-otp-inp').value='';
+  document.getElementById('step-password').style.display='block';
+  document.getElementById('step-otp').style.display='none';
+  hideErr();
+}
+
+async function loadOrders(){
+  try{
+    const res = await fetch(API_URL+'/api/admin/orders', {
+      headers:{'X-Admin-Key': adminKey}
+    });
+    if(res.status===401){ showErr('Session expire — dobara login karo.'); return; }
+    const data = await res.json();
+    const orders = data.orders || [];
+    document.getElementById('login-page').style.display='none';
+    document.getElementById('main-page').style.display='block';
+    renderStats(orders);
+    renderOrders(orders);
+  }catch(e){
+    showErr('Error: '+e.message);
+  }
+}
+
+function renderStats(orders){
+  const total = orders.length;
+  const sent = orders.filter(o=>o.report_status==='sent').length;
+  const pending = total - sent;
+  const revenue = total * 299;
+  document.getElementById('stat-total').textContent=total;
+  document.getElementById('stat-pending').textContent=pending;
+  document.getElementById('stat-sent').textContent=sent;
+  document.getElementById('stat-revenue').textContent='₹'+revenue.toLocaleString('en-IN');
+  document.getElementById('pending-count').textContent=pending+' Pending';
+}
+
+function renderOrders(orders){
+  const container = document.getElementById('orders-container');
+  if(!orders.length){
+    container.innerHTML='<div class="empty">Koi orders nahi hain abhi.</div>';
+    return;
+  }
+  const rows = orders.map(o=>`
+    <tr>
+      <td><strong>${o.name||''}</strong><br/><span style="color:var(--gray-400);font-size:.75rem;">${o.phone||''}</span></td>
+      <td style="max-width:200px;"><span style="font-size:.8rem;">${o.property_address||''}</span></td>
+      <td><span style="font-size:.75rem;color:var(--gray-500);">${o.plan||'Standard'}</span></td>
+      <td><span style="font-size:.75rem;color:var(--gray-400);">${(o.created_at||'').slice(0,16)||'—'}</span></td>
+      <td>
+        ${o.report_status==='sent'
+          ? '<span class="sent-label">✅ Sent</span>'
+          : `<button class="send-btn" onclick="openModal('${o.report_id}','${(o.name||'').replace(/'/g,"\'")}','${o.email||''}','${(o.property_address||'').replace(/'/g,"\'")}')">📤 Send Report</button>`
+        }
+      </td>
+    </tr>
+  `).join('');
+  container.innerHTML=`
+    <table class="orders-table">
+      <thead><tr>
+        <th>Customer</th><th>Property</th><th>Plan</th><th>Date</th><th>Action</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function openModal(reportId, name, email, address){
+  currentReportId = reportId;
+  document.getElementById('m-name').textContent=name;
+  document.getElementById('m-email').textContent=email;
+  document.getElementById('m-address').textContent=address;
+  document.getElementById('m-reportid').textContent=reportId;
+  ['r-owner','r-ownership','r-bb-screenshot','r-encumbrance','r-deed',
+   'r-court','r-rera','r-map','r-remarks','r-pdf','r-screenshot'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('report-modal').classList.add('show');
+}
+
+function closeModal(){
+  document.getElementById('report-modal').classList.remove('show');
+}
+
+async function sendReport(){
+  const btn = document.getElementById('send-btn');
+  const owner = document.getElementById('r-owner').value.trim();
+  const court = document.getElementById('r-court').value.trim();
+  if(!owner||!court){
+    alert('Kam se kam Owner Name aur Court Cases fill karo!');
+    return;
+  }
+  btn.disabled=true;
+  btn.textContent='Sending...';
+  try{
+    const res = await fetch(API_URL+'/api/admin/send-report',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Key': adminKey},
+      body: JSON.stringify({
+        report_id: currentReportId,
+        owner_name: owner,
+        ownership_history: document.getElementById('r-ownership').value.trim(),
+        court_cases: court,
+        encumbrance: document.getElementById('r-encumbrance').value.trim(),
+        deed_history: document.getElementById('r-deed').value.trim(),
+        rera_status: document.getElementById('r-rera').value.trim(),
+        map_boundary: document.getElementById('r-map').value.trim(),
+        remarks: document.getElementById('r-remarks').value.trim(),
+        screenshot_url: document.getElementById('r-bb-screenshot').value.trim()||document.getElementById('r-screenshot').value.trim(),
+        pdf_url: document.getElementById('r-pdf').value.trim(),
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      alert('✅ Report send ho gayi!');
+      closeModal();
+      loadOrders();
+    }else{
+      alert('Error: '+(data.error||'Unknown error'));
+    }
+  }catch(e){
+    alert('Error: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='🚀 Report Send Karo';
+  }
+}
+</script>
+</body>
+</html>
