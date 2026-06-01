@@ -266,6 +266,37 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
 .btn-blue-u{background:var(--blue);color:var(--white);}
 .btn-blue-u:hover{background:var(--blue-dark);}
 
+/* LOCALITY SECTION */
+.locality-section{background:var(--white);border:1px solid var(--gray-200);border-radius:14px;
+  overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;}
+.locality-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--gray-100);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.locality-title{font-weight:700;font-size:1rem;color:var(--gray-900);display:flex;align-items:center;gap:.5rem;}
+.locality-tabs{display:flex;gap:.4rem;padding:1rem 1.5rem;overflow-x:auto;border-bottom:1px solid var(--gray-100);}
+.locality-tabs::-webkit-scrollbar{display:none;}
+.loc-tab{display:flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:100px;
+  font-size:.78rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;
+  border:1.5px solid var(--gray-200);background:var(--gray-50);color:var(--gray-600);}
+.loc-tab:hover{border-color:var(--blue);color:var(--blue);}
+.loc-tab.active{background:var(--blue);color:var(--white);border-color:var(--blue);}
+.loc-tab .tab-count{background:rgba(255,255,255,.25);border-radius:100px;
+  padding:.1rem .4rem;font-size:.68rem;font-weight:700;}
+.loc-tab:not(.active) .tab-count{background:var(--gray-200);color:var(--gray-500);}
+.locality-body{padding:1rem 1.5rem;min-height:120px;}
+.place-list{display:flex;flex-direction:column;gap:.6rem;}
+.place-item{display:flex;align-items:center;gap:.85rem;padding:.8rem 1rem;
+  background:var(--gray-50);border-radius:10px;border:1px solid var(--gray-100);}
+.place-icon{font-size:1.3rem;flex-shrink:0;}
+.place-info{flex:1;min-width:0;}
+.place-name{font-size:.88rem;font-weight:600;color:var(--gray-900);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.place-type{font-size:.72rem;color:var(--gray-400);margin-top:.1rem;text-transform:capitalize;}
+.place-dist{font-size:.78rem;font-weight:700;color:var(--blue);white-space:nowrap;flex-shrink:0;}
+.loc-loading{text-align:center;padding:2rem;color:var(--gray-400);font-size:.88rem;}
+.loc-empty{text-align:center;padding:2rem;color:var(--gray-400);font-size:.85rem;}
+.loc-spinner{width:28px;height:28px;border:3px solid var(--gray-200);border-top-color:var(--blue);
+  border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;}
+
 /* LOADING */
 #loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);z-index:999;
   display:none;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;}
@@ -696,6 +727,31 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
       </div>
     </div>
 
+    <!-- LOCALITY INFO SECTION -->
+    <div class="locality-section" id="locality-section">
+      <div class="locality-header">
+        <div class="locality-title">🗺️ Locality Info <span style="font-size:.72rem;font-weight:400;color:var(--gray-400);margin-left:.3rem;">FREE</span></div>
+        <div style="font-size:.75rem;color:var(--gray-400);">3km radius · OpenStreetMap data</div>
+      </div>
+      <div class="locality-tabs" id="locality-tabs">
+        <div class="loc-tab active" onclick="switchTab('healthcare')" id="tab-healthcare">🏥 Healthcare <span class="tab-count" id="cnt-healthcare">—</span></div>
+        <div class="loc-tab" onclick="switchTab('education')" id="tab-education">🎓 Education <span class="tab-count" id="cnt-education">—</span></div>
+        <div class="loc-tab" onclick="switchTab('food')" id="tab-food">🍽️ Food <span class="tab-count" id="cnt-food">—</span></div>
+        <div class="loc-tab" onclick="switchTab('grocery')" id="tab-grocery">🛒 Grocery <span class="tab-count" id="cnt-grocery">—</span></div>
+        <div class="loc-tab" onclick="switchTab('finance')" id="tab-finance">🏦 Finance <span class="tab-count" id="cnt-finance">—</span></div>
+        <div class="loc-tab" onclick="switchTab('transport')" id="tab-transport">🚌 Transport <span class="tab-count" id="cnt-transport">—</span></div>
+        <div class="loc-tab" onclick="switchTab('shopping')" id="tab-shopping">🛍️ Shopping <span class="tab-count" id="cnt-shopping">—</span></div>
+        <div class="loc-tab" onclick="switchTab('fitness')" id="tab-fitness">💪 Fitness <span class="tab-count" id="cnt-fitness">—</span></div>
+        <div class="loc-tab" onclick="switchTab('parks')" id="tab-parks">🌳 Parks <span class="tab-count" id="cnt-parks">—</span></div>
+        <div class="loc-tab" onclick="switchTab('worship')" id="tab-worship">🙏 Worship <span class="tab-count" id="cnt-worship">—</span></div>
+        <div class="loc-tab" onclick="switchTab('utilities')" id="tab-utilities">⛽ Utilities <span class="tab-count" id="cnt-utilities">—</span></div>
+        <div class="loc-tab" onclick="switchTab('safety')" id="tab-safety">👮 Safety <span class="tab-count" id="cnt-safety">—</span></div>
+      </div>
+      <div class="locality-body" id="locality-body">
+        <div class="loc-loading"><div class="loc-spinner"></div>Nearby places fetch ho rahe hain...</div>
+      </div>
+    </div>
+
     <!-- WhatsApp CTA -->
     <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid rgba(22,163,74,.2);
       border-radius:12px;padding:1.5rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;">
@@ -803,6 +859,8 @@ function runCheck(){
         document.getElementById('page-landing').style.display='none';
         document.getElementById('page-result').style.display='block';
         window.scrollTo({top:0,behavior:'smooth'});
+        // Fetch locality data
+        fetchLocality(window._userData.fullAddress);
       },500);
       return;
     }
@@ -876,6 +934,63 @@ function showThankYouPage(plan) {
 
 function goPayment(amount,plan){ goGetReport(plan); }
 
+
+// ── LOCALITY / NEARBY PLACES ──
+let _localityData = {};
+let _activeTab = 'healthcare';
+
+async function fetchLocality(address) {
+  try {
+    const res = await fetch(API_URL + '/api/nearby?address=' + encodeURIComponent(address));
+    const data = await res.json();
+    if (data.success && data.places) {
+      _localityData = data.places;
+      updateTabCounts();
+      renderTab(_activeTab);
+    } else {
+      document.getElementById('locality-body').innerHTML =
+        '<div class="loc-empty">📍 Is area ka data available nahi hai abhi.</div>';
+    }
+  } catch(e) {
+    document.getElementById('locality-body').innerHTML =
+      '<div class="loc-empty">⚠️ Locality data load nahi ho saka.</div>';
+  }
+}
+
+function updateTabCounts() {
+  const cats = ['healthcare','education','food','grocery','finance','transport','shopping','fitness','parks','worship','utilities','safety'];
+  for (const cat of cats) {
+    const el = document.getElementById('cnt-' + cat);
+    if (el) el.textContent = (_localityData[cat] || []).length || '0';
+  }
+}
+
+function switchTab(cat) {
+  _activeTab = cat;
+  document.querySelectorAll('.loc-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById('tab-' + cat);
+  if (tab) tab.classList.add('active');
+  renderTab(cat);
+}
+
+function renderTab(cat) {
+  const body = document.getElementById('locality-body');
+  const items = _localityData[cat] || [];
+  if (!items.length) {
+    body.innerHTML = '<div class="loc-empty">😕 Is category mein koi jagah nahi mili 3km ke andar.</div>';
+    return;
+  }
+  body.innerHTML = '<div class="place-list">' + items.map(p => `
+    <div class="place-item">
+      <div class="place-icon">${p.icon}</div>
+      <div class="place-info">
+        <div class="place-name">${p.name}</div>
+        <div class="place-type">${p.type}</div>
+      </div>
+      <div class="place-dist">${p.distance_text}</div>
+    </div>
+  `).join('') + '</div>';
+}
 
 // Close mob menu on link click
 document.querySelectorAll('.mob-menu a').forEach(a=>a.addEventListener('click',closeMob));
