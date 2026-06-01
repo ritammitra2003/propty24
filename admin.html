@@ -102,6 +102,25 @@ textarea.field-inp{resize:vertical;min-height:80px;}
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.3rem;}
 .site-section .field-group{padding:0 1rem;margin-bottom:.85rem;}
 .site-section .field-group:first-of-type{margin-top:.75rem;}
+.tabs-bar{display:flex;gap:.5rem;margin-bottom:1.5rem;border-bottom:2px solid var(--gray-200);padding-bottom:0;}
+.tab-btn{padding:.7rem 1.2rem;font-size:.85rem;font-weight:600;cursor:pointer;border:none;
+  background:none;color:var(--gray-500);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-btn:hover{color:var(--blue);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.log-table{width:100%;border-collapse:collapse;background:var(--white);
+  border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.log-table th{background:var(--gray-50);padding:.85rem 1rem;text-align:left;
+  font-size:.72rem;font-weight:700;color:var(--gray-500);text-transform:uppercase;
+  letter-spacing:.5px;border-bottom:1px solid var(--gray-200);}
+.log-table td{padding:.85rem 1rem;border-bottom:1px solid var(--gray-100);
+  font-size:.82rem;color:var(--gray-700);vertical-align:top;}
+.log-table tr:last-child td{border-bottom:none;}
+.log-table tr:hover td{background:var(--gray-50);}
+.places-pills{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem;}
+.place-pill{background:var(--blue-light);color:var(--blue);font-size:.68rem;font-weight:600;
+  padding:.2rem .5rem;border-radius:4px;}
 .loading{text-align:center;padding:3rem;color:var(--gray-400);}
 .empty{text-align:center;padding:3rem;color:var(--gray-400);}
 @media(max-width:768px){
@@ -179,12 +198,31 @@ textarea.field-inp{resize:vertical;min-height:80px;}
         <div class="stat-label">Total Revenue</div>
       </div>
     </div>
+    <div class="tabs-bar">
+      <button class="tab-btn active" onclick="switchAdminTab('orders')">📋 Orders</button>
+      <button class="tab-btn" onclick="switchAdminTab('searchlogs')" id="tab-searchlogs-btn">🔍 Search Logs</button>
+    </div>
+
+    <!-- Orders Tab -->
+    <div class="tab-panel active" id="panel-orders">
     <div class="section-title">
       📋 All Orders
       <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh</button>
     </div>
     <div id="orders-container">
       <div class="loading">Loading orders...</div>
+    </div>
+    </div>
+
+    <!-- Search Logs Tab -->
+    <div class="tab-panel" id="panel-searchlogs">
+    <div class="section-title">
+      🔍 Search Logs — User Ne Kya Khoja
+      <button class="refresh-btn" onclick="loadSearchLogs()">🔄 Refresh</button>
+    </div>
+    <div id="searchlogs-container">
+      <div class="loading">Loading search logs...</div>
+    </div>
     </div>
   </div>
 </div>
@@ -290,6 +328,71 @@ textarea.field-inp{resize:vertical;min-height:80px;}
 const API_URL = 'https://propty24backend.ritammitra2003.workers.dev';
 let adminKey = '';
 let currentReportId = '';
+
+function switchAdminTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  if (tab === 'orders') {
+    document.querySelector('.tab-btn').classList.add('active');
+    document.getElementById('panel-orders').classList.add('active');
+  } else {
+    document.getElementById('tab-searchlogs-btn').classList.add('active');
+    document.getElementById('panel-searchlogs').classList.add('active');
+    loadSearchLogs();
+  }
+}
+
+async function loadSearchLogs() {
+  const container = document.getElementById('searchlogs-container');
+  container.innerHTML = '<div class="loading">Loading...</div>';
+  try {
+    const res = await fetch(API_URL + '/api/admin/search-logs', {
+      headers: { 'X-Admin-Key': adminKey }
+    });
+    const data = await res.json();
+    const logs = data.logs || [];
+    if (!logs.length) {
+      container.innerHTML = '<div class="empty">Abhi tak koi search nahi hua.</div>';
+      return;
+    }
+    const rows = logs.map(log => {
+      let placesHtml = '';
+      try {
+        const places = JSON.parse(log.places_json || '{}');
+        const cats = Object.keys(places);
+        if (cats.length) {
+          placesHtml = '<div class="places-pills">' +
+            cats.map(c => {
+              const icons = {healthcare:'🏥',education:'🎓',food:'🍽️',grocery:'🛒',
+                finance:'🏦',transport:'🚌',shopping:'🛍️',fitness:'💪',
+                parks:'🌳',worship:'🙏',utilities:'⛽',safety:'👮'};
+              return `<span class="place-pill">${icons[c]||'📍'} ${c} (${places[c].length})</span>`;
+            }).join('') + '</div>';
+          // Top 3 places preview
+          const topPlaces = cats.slice(0,3).map(c =>
+            (places[c][0] ? `<span style="font-size:.72rem;color:var(--gray-500);">• ${places[c][0].icon} ${places[c][0].name} (${places[c][0].distance_text})</span>` : '')
+          ).filter(Boolean).join('<br/>');
+          if (topPlaces) placesHtml += '<div style="margin-top:.4rem;line-height:1.7;">' + topPlaces + '</div>';
+        }
+      } catch(e) {}
+      return `<tr>
+        <td style="font-size:.75rem;color:var(--gray-400);white-space:nowrap;">${(log.searched_at||'').slice(0,16)}</td>
+        <td><strong style="font-size:.85rem;">${log.address||'—'}</strong></td>
+        <td style="font-size:.75rem;color:var(--gray-500);">${log.lat ? log.lat.toFixed(4)+', '+log.lon.toFixed(4) : '—'}</td>
+        <td>${placesHtml || '<span style="color:var(--gray-400);font-size:.78rem;">No data</span>'}</td>
+      </tr>`;
+    }).join('');
+    container.innerHTML = `
+      <table class="log-table">
+        <thead><tr>
+          <th>Time</th><th>Property Address Searched</th><th>Coordinates</th><th>Nearby Data Mila</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } catch(e) {
+    container.innerHTML = '<div class="empty">Error: ' + e.message + '</div>';
+  }
+}
 
 // ── STEP 1: Email + Password check ──
 async function doStep1(){
