@@ -515,14 +515,15 @@ async function loadOrders(){
 
 function renderStats(orders){
   const total = orders.length;
+  const paid = orders.filter(o=>o.status==='paid').length;
+  const pending_pay = orders.filter(o=>o.status==='pending_payment').length;
   const sent = orders.filter(o=>o.report_status==='sent').length;
-  const pending = total - sent;
-  const revenue = total * 299;
+  const revenue = orders.filter(o=>o.status==='paid').reduce((s,o)=>s+(o.amount||299),0);
   document.getElementById('stat-total').textContent=total;
-  document.getElementById('stat-pending').textContent=pending;
+  document.getElementById('stat-pending').textContent=pending_pay;
   document.getElementById('stat-sent').textContent=sent;
   document.getElementById('stat-revenue').textContent='₹'+revenue.toLocaleString('en-IN');
-  document.getElementById('pending-count').textContent=pending+' Pending';
+  document.getElementById('pending-count').textContent=pending_pay+' Awaiting Payment';
 }
 
 function renderOrders(orders){
@@ -531,27 +532,53 @@ function renderOrders(orders){
     container.innerHTML='<div class="empty">Koi orders nahi hain abhi.</div>';
     return;
   }
-  const rows = orders.map(o=>`
-    <tr>
+  const rows = orders.map(o=>{
+    const isPaid = o.status==='paid';
+    const isReportSent = o.report_status==='sent';
+    const payBtn = isPaid
+      ? '<span style="color:var(--green);font-size:.78rem;font-weight:600;">✅ Paid</span>'
+      : `<button class="send-btn" style="background:var(--orange);" onclick="markPaid('${o.report_id}')">💰 Mark Paid</button>`;
+    const reportBtn = isPaid
+      ? (isReportSent
+          ? '<span class="sent-label">📤 Report Sent</span>'
+          : `<button class="send-btn" onclick="openModal('${o.report_id}','${(o.name||'').replace(/'/g,"\\'")}','${o.email||''}','${(o.property_address||'').replace(/'/g,"\\'")}')">📤 Send Report</button>`)
+      : '<span style="color:var(--gray-400);font-size:.75rem;">⏳ Pending</span>';
+    return `<tr>
       <td><strong>${o.name||''}</strong><br/><span style="color:var(--gray-400);font-size:.75rem;">${o.phone||''}</span></td>
-      <td style="max-width:200px;"><span style="font-size:.8rem;">${o.property_address||''}</span></td>
-      <td><span style="font-size:.75rem;color:var(--gray-500);">${o.plan||'Standard'}</span></td>
+      <td style="max-width:180px;"><span style="font-size:.8rem;">${o.property_address||''}</span></td>
+      <td><span style="font-size:.75rem;color:var(--gray-500);">${o.plan||'Standard'}<br/><strong>₹${o.amount||'—'}</strong></span></td>
       <td><span style="font-size:.75rem;color:var(--gray-400);">${(o.created_at||'').slice(0,16)||'—'}</span></td>
-      <td>
-        ${o.report_status==='sent'
-          ? '<span class="sent-label">✅ Sent</span>'
-          : `<button class="send-btn" onclick="openModal('${o.report_id}','${(o.name||'').replace(/'/g,"\'")}','${o.email||''}','${(o.property_address||'').replace(/'/g,"\'")}')">📤 Send Report</button>`
-        }
-      </td>
-    </tr>
-  `).join('');
+      <td>${payBtn}</td>
+      <td>${reportBtn}</td>
+    </tr>`;
+  }).join('');
   container.innerHTML=`
     <table class="orders-table">
       <thead><tr>
-        <th>Customer</th><th>Property</th><th>Plan</th><th>Date</th><th>Action</th>
+        <th>Customer</th><th>Property</th><th>Plan / Amount</th><th>Date</th><th>Payment</th><th>Report</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
+}
+
+async function markPaid(reportId){
+  if(!confirm('Payment verify kar li? "Mark Paid" karne se customer ko confirmation email jaayegi.')) return;
+  try{
+    const res = await fetch(API_URL+'/api/admin/mark-paid',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Key': adminKey},
+      body: JSON.stringify({ report_id: reportId })
+    });
+    const data = await res.json();
+    if(data.success){
+      alert('✅ Payment marked! Customer ko confirmation email bhej di gayi.');
+      loadOrders();
+    } else {
+      alert('Error: '+(data.error||'Unknown'));
+    }
+  }catch(e){
+    alert('Error: '+e.message);
+  }
 }
 
 function openModal(reportId, name, email, address){
