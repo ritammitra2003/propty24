@@ -369,11 +369,11 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
 <div id="loading-overlay">
   <div class="spinner"></div>
   <div>
-    <div class="loading-text">Scanning Property...</div>
-    <div class="loading-sub" id="loading-step">Connecting to RERA database...</div>
+    <div class="loading-text">Property Details Save Ho Rahe Hain...</div>
+    <div class="loading-sub" id="loading-step">Property details save ho rahe hain...</div>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-  <div class="step-indicator" id="step-indicator">Step 1 of 4</div>
+  <div class="step-indicator" id="step-indicator">Step 1 of 3</div>
 </div>
 
 <!-- ═══════════ PAGE 1: LANDING ═══════════ -->
@@ -526,7 +526,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
         <div class="step-num">3</div>
         <div class="step-ico">📊</div>
         <div class="step-t">Free Preview</div>
-        <p class="step-d">See basic results for free — RERA status, court flag, partial fraud score.</p>
+        <p class="step-d">Locality info dekhein free mein — nearby hospitals, schools, banks aur transport.</p>
         <span class="step-arrow">→</span>
       </div>
       <div class="step">
@@ -580,7 +580,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
       <button class="back-btn" onclick="showLanding()">← Back</button>
       <div>
         <div class="result-title">Property Check Results</div>
-        <div class="result-subtitle">Free preview — 2 of 6 checks shown</div>
+        <div class="result-subtitle">Locality info · Full report 24–48 hrs mein milegi</div>
       </div>
     </div>
 
@@ -591,61 +591,45 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
         <div class="prop-addr" id="result-addr">—</div>
         <div class="prop-meta" id="result-meta">—</div>
       </div>
-      <div class="prop-status">⚠️ Partial Scan Complete</div>
+      <div class="prop-status">📋 Report Requested</div>
     </div>
 
-    <!-- FREE RESULTS -->
-    <div class="free-card">
-      <div class="free-card-header">
-        <div class="free-card-title">🆓 Free Checks <span class="free-tag">FREE</span></div>
-        <div style="font-size:.78rem;color:var(--gray-400);">2 of 6 checks</div>
+    <!-- LOCALITY INFO SECTION — shown first, real data -->
+    <div class="locality-section" id="locality-section" style="margin-bottom:1.5rem;">
+      <div class="locality-header">
+        <div class="locality-title">🗺️ Locality Info <span style="font-size:.72rem;font-weight:400;color:var(--gray-400);margin-left:.3rem;">FREE</span></div>
+        <div style="font-size:.75rem;color:var(--gray-400);">3km radius · OpenStreetMap data</div>
       </div>
-
-      <!-- Check 1: RERA -->
-      <div class="check-row">
-        <div class="cr-icon green">🏛</div>
-        <div class="cr-info">
-          <div class="cr-title">RERA Registration</div>
-          <div class="cr-sub" id="rera-sub">Checking builder/project on RERA portal</div>
-        </div>
-        <div class="cr-result">
-          <div class="result-pill pill-green" id="rera-result">✓ Registered</div>
-          <div class="result-note">Maharashtra RERA</div>
-        </div>
+      <div class="locality-tabs" id="locality-tabs">
+        <div class="loc-tab active" onclick="switchTab('healthcare')" id="tab-healthcare">🏥 Healthcare <span class="tab-count" id="cnt-healthcare">—</span></div>
+        <div class="loc-tab" onclick="switchTab('education')" id="tab-education">🎓 Education <span class="tab-count" id="cnt-education">—</span></div>
+        <div class="loc-tab" onclick="switchTab('food')" id="tab-food">🍽️ Food <span class="tab-count" id="cnt-food">—</span></div>
+        <div class="loc-tab" onclick="switchTab('grocery')" id="tab-grocery">🛒 Grocery <span class="tab-count" id="cnt-grocery">—</span></div>
+        <div class="loc-tab" onclick="switchTab('finance')" id="tab-finance">🏦 Finance <span class="tab-count" id="cnt-finance">—</span></div>
+        <div class="loc-tab" onclick="switchTab('transport')" id="tab-transport">🚌 Transport <span class="tab-count" id="cnt-transport">—</span></div>
+        <div class="loc-tab" onclick="switchTab('shopping')" id="tab-shopping">🛍️ Shopping <span class="tab-count" id="cnt-shopping">—</span></div>
+        <div class="loc-tab" onclick="switchTab('fitness')" id="tab-fitness">💪 Fitness <span class="tab-count" id="cnt-fitness">—</span></div>
+        <div class="loc-tab" onclick="switchTab('parks')" id="tab-parks">🌳 Parks <span class="tab-count" id="cnt-parks">—</span></div>
+        <div class="loc-tab" onclick="switchTab('worship')" id="tab-worship">🙏 Worship <span class="tab-count" id="cnt-worship">—</span></div>
+        <div class="loc-tab" onclick="switchTab('utilities')" id="tab-utilities">⛽ Utilities <span class="tab-count" id="cnt-utilities">—</span></div>
+        <div class="loc-tab" onclick="switchTab('safety')" id="tab-safety">👮 Safety <span class="tab-count" id="cnt-safety">—</span></div>
       </div>
-
-      <!-- Check 2: Court -->
-      <div class="check-row">
-        <div class="cr-icon orange" id="court-icon">⚖️</div>
-        <div class="cr-info">
-          <div class="cr-title">Court Case Check</div>
-          <div class="cr-sub" id="court-sub">Scanning district courts & high courts</div>
-        </div>
-        <div class="cr-result">
-          <div class="result-pill pill-orange" id="court-result">⚠ 1 Case Found</div>
-          <div class="result-note" id="court-note">2019 — Ongoing</div>
-        </div>
+      <div class="locality-body" id="locality-body">
+        <div class="loc-loading"><div class="loc-spinner"></div>Nearby places fetch ho rahe hain...</div>
       </div>
     </div>
 
-    <!-- RISK SCORE TEASER -->
-    <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:14px;
-      padding:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem;
-      box-shadow:var(--shadow-sm);flex-wrap:wrap;">
-      <div style="text-align:center;min-width:90px;">
-        <div style="font-size:.7rem;color:var(--gray-500);text-transform:uppercase;
-          letter-spacing:1px;margin-bottom:.3rem;">Risk Score</div>
-        <div style="font-family:'Poppins',sans-serif;font-size:2.8rem;font-weight:800;
-          color:var(--orange);line-height:1;">62</div>
-        <div style="font-size:.7rem;color:var(--orange);font-weight:600;">Medium Risk</div>
-      </div>
-      <div style="flex:1;min-width:200px;">
-        <div style="font-weight:600;font-size:.95rem;color:var(--gray-900);margin-bottom:.3rem;">
-          ⚠️ Attention Needed
+    <!-- HONEST INFO BANNER -->
+    <div style="background:#FFF7ED;border:1.5px solid rgba(234,88,12,.25);border-radius:12px;
+      padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1rem;">
+      <div style="font-size:1.5rem;flex-shrink:0;">🔍</div>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;color:#9A3412;margin-bottom:.3rem;">
+          Full Verification Manually Hogi
         </div>
-        <div style="font-size:.83rem;color:var(--gray-500);line-height:1.6;">
-          Our AI found <strong style="color:var(--orange)">3 risk signals</strong> in this property.
-          Unlock full report to see ownership history, encumbrance status, and detailed fraud analysis.
+        <div style="font-size:.82rem;color:#C2410C;line-height:1.7;">
+          RERA registration, court cases, ownership history aur encumbrance — yeh sab government portals se manually verify hoti hai.<br/>
+          <strong>Hamari team 24–48 hours mein aapko complete verified report bhejegi.</strong>
         </div>
       </div>
     </div>
@@ -727,31 +711,6 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
       </div>
     </div>
 
-    <!-- LOCALITY INFO SECTION -->
-    <div class="locality-section" id="locality-section">
-      <div class="locality-header">
-        <div class="locality-title">🗺️ Locality Info <span style="font-size:.72rem;font-weight:400;color:var(--gray-400);margin-left:.3rem;">FREE</span></div>
-        <div style="font-size:.75rem;color:var(--gray-400);">3km radius · OpenStreetMap data</div>
-      </div>
-      <div class="locality-tabs" id="locality-tabs">
-        <div class="loc-tab active" onclick="switchTab('healthcare')" id="tab-healthcare">🏥 Healthcare <span class="tab-count" id="cnt-healthcare">—</span></div>
-        <div class="loc-tab" onclick="switchTab('education')" id="tab-education">🎓 Education <span class="tab-count" id="cnt-education">—</span></div>
-        <div class="loc-tab" onclick="switchTab('food')" id="tab-food">🍽️ Food <span class="tab-count" id="cnt-food">—</span></div>
-        <div class="loc-tab" onclick="switchTab('grocery')" id="tab-grocery">🛒 Grocery <span class="tab-count" id="cnt-grocery">—</span></div>
-        <div class="loc-tab" onclick="switchTab('finance')" id="tab-finance">🏦 Finance <span class="tab-count" id="cnt-finance">—</span></div>
-        <div class="loc-tab" onclick="switchTab('transport')" id="tab-transport">🚌 Transport <span class="tab-count" id="cnt-transport">—</span></div>
-        <div class="loc-tab" onclick="switchTab('shopping')" id="tab-shopping">🛍️ Shopping <span class="tab-count" id="cnt-shopping">—</span></div>
-        <div class="loc-tab" onclick="switchTab('fitness')" id="tab-fitness">💪 Fitness <span class="tab-count" id="cnt-fitness">—</span></div>
-        <div class="loc-tab" onclick="switchTab('parks')" id="tab-parks">🌳 Parks <span class="tab-count" id="cnt-parks">—</span></div>
-        <div class="loc-tab" onclick="switchTab('worship')" id="tab-worship">🙏 Worship <span class="tab-count" id="cnt-worship">—</span></div>
-        <div class="loc-tab" onclick="switchTab('utilities')" id="tab-utilities">⛽ Utilities <span class="tab-count" id="cnt-utilities">—</span></div>
-        <div class="loc-tab" onclick="switchTab('safety')" id="tab-safety">👮 Safety <span class="tab-count" id="cnt-safety">—</span></div>
-      </div>
-      <div class="locality-body" id="locality-body">
-        <div class="loc-loading"><div class="loc-spinner"></div>Nearby places fetch ho rahe hain...</div>
-      </div>
-    </div>
-
     <!-- WhatsApp CTA -->
     <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid rgba(22,163,74,.2);
       border-radius:12px;padding:1.5rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;">
@@ -790,10 +749,9 @@ function showLanding(){
 
 // LOADING SIMULATION
 const steps=[
-  {text:'Connecting to RERA database...',step:'Step 1 of 4',pct:20},
-  {text:'Scanning court records...',step:'Step 2 of 4',pct:45},
-  {text:'Checking ownership history...',step:'Step 3 of 4',pct:70},
-  {text:'Generating fraud risk score...',step:'Step 4 of 4',pct:95},
+  {text:'Property details save ho rahe hain...',step:'Step 1 of 3',pct:30},
+  {text:'Locality aur nearby area check ho raha hai...',step:'Step 2 of 3',pct:65},
+  {text:'Report request queue mein ja rahi hai...',step:'Step 3 of 3',pct:95},
 ];
 
 function onStateChange(){}
