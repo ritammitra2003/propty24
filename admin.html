@@ -355,37 +355,19 @@ async function loadSearchLogs() {
       container.innerHTML = '<div class="empty">Abhi tak koi search nahi hua.</div>';
       return;
     }
-    const rows = logs.map(log => {
-      let placesHtml = '';
-      try {
-        const places = JSON.parse(log.places_json || '{}');
-        const cats = Object.keys(places);
-        if (cats.length) {
-          placesHtml = '<div class="places-pills">' +
-            cats.map(c => {
-              const icons = {healthcare:'🏥',education:'🎓',food:'🍽️',grocery:'🛒',
-                finance:'🏦',transport:'🚌',shopping:'🛍️',fitness:'💪',
-                parks:'🌳',worship:'🙏',utilities:'⛽',safety:'👮'};
-              return `<span class="place-pill">${icons[c]||'📍'} ${c} (${places[c].length})</span>`;
-            }).join('') + '</div>';
-          // Top 3 places preview
-          const topPlaces = cats.slice(0,3).map(c =>
-            (places[c][0] ? `<span style="font-size:.72rem;color:var(--gray-500);">• ${places[c][0].icon} ${places[c][0].name} (${places[c][0].distance_text})</span>` : '')
-          ).filter(Boolean).join('<br/>');
-          if (topPlaces) placesHtml += '<div style="margin-top:.4rem;line-height:1.7;">' + topPlaces + '</div>';
-        }
-      } catch(e) {}
-      return `<tr>
-        <td style="font-size:.75rem;color:var(--gray-400);white-space:nowrap;">${(log.searched_at||'').slice(0,16)}</td>
-        <td><strong style="font-size:.85rem;">${log.address||'—'}</strong></td>
-        <td style="font-size:.75rem;color:var(--gray-500);">${log.lat ? log.lat.toFixed(4)+', '+log.lon.toFixed(4) : '—'}</td>
-        <td>${placesHtml || '<span style="color:var(--gray-400);font-size:.78rem;">No data</span>'}</td>
-      </tr>`;
-    }).join('');
+    const rows = logs.map(log => `<tr>
+      <td style="font-size:.75rem;color:var(--gray-400);white-space:nowrap;">${(log.searched_at||'').slice(0,16)}</td>
+      <td><strong style="font-size:.85rem;">${log.address||'—'}</strong></td>
+      <td style="font-size:.75rem;color:var(--gray-500);">${log.state||'—'}</td>
+      <td style="font-size:.75rem;color:var(--gray-500);">${log.district||'—'}</td>
+      <td style="font-size:.75rem;color:var(--gray-500);">${log.city||'—'}</td>
+      <td style="font-size:.75rem;color:var(--gray-500);">${log.proptype||'—'}</td>
+      <td style="font-size:.75rem;color:var(--gray-500);">${log.pin||'—'}</td>
+    </tr>`).join('');
     container.innerHTML = `
       <table class="log-table">
         <thead><tr>
-          <th>Time</th><th>Property Address Searched</th><th>Coordinates</th><th>Nearby Data Mila</th>
+          <th>Time</th><th>Full Address</th><th>State</th><th>District</th><th>City</th><th>Type</th><th>PIN</th>
         </tr></thead>
         <tbody>${rows}</tbody>
       </table>`;
@@ -564,6 +546,10 @@ function renderOrders(orders){
       : `<button class="send-btn" disabled style="font-size:.72rem;padding:.4rem .7rem;
           background:var(--gray-200);color:var(--gray-400);cursor:not-allowed;">🙏 Thanks</button>`;
 
+    // Button 4 — Delete order
+    const btn4 = `<button class="send-btn" style="background:#EF4444;font-size:.72rem;padding:.4rem .7rem;"
+        onclick="deleteOrder('${rid}')">🗑 Delete</button>`;
+
     return `<tr>
       <td><strong>${o.name||''}</strong><br/>
         <span style="color:var(--gray-400);font-size:.75rem;">${o.phone||''}</span><br/>
@@ -577,6 +563,7 @@ function renderOrders(orders){
           ${btn1}
           ${btn2}
           ${btn3}
+          ${btn4}
         </div>
       </td>
     </tr>`;
@@ -621,6 +608,26 @@ async function sendThankYou(reportId){
     const data = await res.json();
     if(data.success){
       alert('🙏 Thank You email bhej di gayi!');
+    } else {
+      alert('Error: '+(data.error||'Unknown'));
+    }
+  }catch(e){
+    alert('Error: '+e.message);
+  }
+}
+
+async function deleteOrder(reportId){
+  if(!confirm('⚠️ Yeh order permanently delete ho jaayega. Confirm?')) return;
+  try{
+    const res = await fetch(API_URL+'/api/admin/delete-order',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Key': adminKey},
+      body: JSON.stringify({ report_id: reportId })
+    });
+    const data = await res.json();
+    if(data.success){
+      alert('🗑 Order delete ho gaya.');
+      loadOrders();
     } else {
       alert('Error: '+(data.error||'Unknown'));
     }
