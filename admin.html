@@ -535,27 +535,56 @@ function renderOrders(orders){
   const rows = orders.map(o=>{
     const isPaid = o.status==='paid';
     const isReportSent = o.report_status==='sent';
-    const payBtn = isPaid
-      ? '<span style="color:var(--green);font-size:.78rem;font-weight:600;">✅ Paid</span>'
-      : `<button class="send-btn" style="background:var(--orange);" onclick="markPaid('${o.report_id}')">💰 Mark Paid</button>`;
-    const reportBtn = isPaid
+    const rid = o.report_id;
+    const nm = (o.name||'').replace(/'/g,"\\'");
+    const em = o.email||'';
+    const ad = (o.property_address||'').replace(/'/g,"\\'");
+
+    // Button 1 — Mark Paid
+    const btn1 = isPaid
+      ? `<span style="display:inline-flex;align-items:center;gap:.3rem;background:#DCFCE7;color:var(--green);
+          font-size:.72rem;font-weight:700;padding:.35rem .7rem;border-radius:6px;">✅ Paid</span>`
+      : `<button class="send-btn" style="background:var(--orange);font-size:.72rem;padding:.4rem .7rem;"
+          onclick="markPaid('${rid}')">💰 Mark Paid</button>`;
+
+    // Button 2 — Send Report (only if paid)
+    const btn2 = isPaid
       ? (isReportSent
-          ? '<span class="sent-label">📤 Report Sent</span>'
-          : `<button class="send-btn" onclick="openModal('${o.report_id}','${(o.name||'').replace(/'/g,"\\'")}','${o.email||''}','${(o.property_address||'').replace(/'/g,"\\'")}')">📤 Send Report</button>`)
-      : '<span style="color:var(--gray-400);font-size:.75rem;">⏳ Pending</span>';
+          ? `<span style="display:inline-flex;align-items:center;gap:.3rem;background:#EEF3FF;color:var(--blue);
+              font-size:.72rem;font-weight:700;padding:.35rem .7rem;border-radius:6px;">📤 Sent</span>`
+          : `<button class="send-btn" style="font-size:.72rem;padding:.4rem .7rem;"
+              onclick="openModal('${rid}','${nm}','${em}','${ad}')">📤 Send Report</button>`)
+      : `<button class="send-btn" disabled style="font-size:.72rem;padding:.4rem .7rem;
+          background:var(--gray-200);color:var(--gray-400);cursor:not-allowed;">📤 Report</button>`;
+
+    // Button 3 — Send Thank You email
+    const btn3 = isPaid
+      ? `<button class="send-btn" style="background:#7C3AED;font-size:.72rem;padding:.4rem .7rem;"
+          onclick="sendThankYou('${rid}')">🙏 Thank You</button>`
+      : `<button class="send-btn" disabled style="font-size:.72rem;padding:.4rem .7rem;
+          background:var(--gray-200);color:var(--gray-400);cursor:not-allowed;">🙏 Thanks</button>`;
+
     return `<tr>
-      <td><strong>${o.name||''}</strong><br/><span style="color:var(--gray-400);font-size:.75rem;">${o.phone||''}</span></td>
-      <td style="max-width:180px;"><span style="font-size:.8rem;">${o.property_address||''}</span></td>
+      <td><strong>${o.name||''}</strong><br/>
+        <span style="color:var(--gray-400);font-size:.75rem;">${o.phone||''}</span><br/>
+        <span style="color:var(--gray-400);font-size:.72rem;">${o.email||''}</span>
+      </td>
+      <td style="max-width:160px;"><span style="font-size:.8rem;">${o.property_address||''}</span></td>
       <td><span style="font-size:.75rem;color:var(--gray-500);">${o.plan||'Standard'}<br/><strong>₹${o.amount||'—'}</strong></span></td>
       <td><span style="font-size:.75rem;color:var(--gray-400);">${(o.created_at||'').slice(0,16)||'—'}</span></td>
-      <td>${payBtn}</td>
-      <td>${reportBtn}</td>
+      <td>
+        <div style="display:flex;flex-direction:column;gap:.4rem;">
+          ${btn1}
+          ${btn2}
+          ${btn3}
+        </div>
+      </td>
     </tr>`;
   }).join('');
   container.innerHTML=`
     <table class="orders-table">
       <thead><tr>
-        <th>Customer</th><th>Property</th><th>Plan / Amount</th><th>Date</th><th>Payment</th><th>Report</th>
+        <th>Customer</th><th>Property</th><th>Plan / Amount</th><th>Date</th><th>Actions</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
@@ -573,6 +602,25 @@ async function markPaid(reportId){
     if(data.success){
       alert('✅ Payment marked! Customer ko confirmation email bhej di gayi.');
       loadOrders();
+    } else {
+      alert('Error: '+(data.error||'Unknown'));
+    }
+  }catch(e){
+    alert('Error: '+e.message);
+  }
+}
+
+async function sendThankYou(reportId){
+  if(!confirm('Customer ko Thank You email bhejna hai?')) return;
+  try{
+    const res = await fetch(API_URL+'/api/admin/send-thankyou',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Admin-Key': adminKey},
+      body: JSON.stringify({ report_id: reportId })
+    });
+    const data = await res.json();
+    if(data.success){
+      alert('🙏 Thank You email bhej di gayi!');
     } else {
       alert('Error: '+(data.error||'Unknown'));
     }
