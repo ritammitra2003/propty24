@@ -109,6 +109,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(-
 .btn-submit:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:var(--shadow);}
 .cc-foot{display:flex;align-items:center;justify-content:center;gap:.4rem;flex-wrap:wrap;
   font-size:.7rem;color:var(--gray-400);margin-top:.75rem;}
+.prop-type-btn{display:flex;align-items:center;gap:.4rem;padding:.65rem .9rem;
+  border:1.5px solid var(--gray-200);border-radius:8px;font-size:.85rem;font-weight:500;
+  color:var(--gray-700);cursor:pointer;transition:all .2s;background:var(--gray-50);}
+.prop-type-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light);}
+.prop-type-btn.active{border-color:var(--blue);color:var(--blue);background:var(--blue-light);font-weight:700;}
 
 /* TRUST STRIP */
 .trust-strip{background:var(--white);border-bottom:1px solid var(--gray-200);padding:.9rem 5%;
@@ -261,6 +266,37 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
 .btn-blue-u{background:var(--blue);color:var(--white);}
 .btn-blue-u:hover{background:var(--blue-dark);}
 
+/* LOCALITY SECTION */
+.locality-section{background:var(--white);border:1px solid var(--gray-200);border-radius:14px;
+  overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;}
+.locality-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--gray-100);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.locality-title{font-weight:700;font-size:1rem;color:var(--gray-900);display:flex;align-items:center;gap:.5rem;}
+.locality-tabs{display:flex;gap:.4rem;padding:1rem 1.5rem;overflow-x:auto;border-bottom:1px solid var(--gray-100);}
+.locality-tabs::-webkit-scrollbar{display:none;}
+.loc-tab{display:flex;align-items:center;gap:.3rem;padding:.45rem .9rem;border-radius:100px;
+  font-size:.78rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;
+  border:1.5px solid var(--gray-200);background:var(--gray-50);color:var(--gray-600);}
+.loc-tab:hover{border-color:var(--blue);color:var(--blue);}
+.loc-tab.active{background:var(--blue);color:var(--white);border-color:var(--blue);}
+.loc-tab .tab-count{background:rgba(255,255,255,.25);border-radius:100px;
+  padding:.1rem .4rem;font-size:.68rem;font-weight:700;}
+.loc-tab:not(.active) .tab-count{background:var(--gray-200);color:var(--gray-500);}
+.locality-body{padding:1rem 1.5rem;min-height:120px;}
+.place-list{display:flex;flex-direction:column;gap:.6rem;}
+.place-item{display:flex;align-items:center;gap:.85rem;padding:.8rem 1rem;
+  background:var(--gray-50);border-radius:10px;border:1px solid var(--gray-100);}
+.place-icon{font-size:1.3rem;flex-shrink:0;}
+.place-info{flex:1;min-width:0;}
+.place-name{font-size:.88rem;font-weight:600;color:var(--gray-900);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.place-type{font-size:.72rem;color:var(--gray-400);margin-top:.1rem;text-transform:capitalize;}
+.place-dist{font-size:.78rem;font-weight:700;color:var(--blue);white-space:nowrap;flex-shrink:0;}
+.loc-loading{text-align:center;padding:2rem;color:var(--gray-400);font-size:.88rem;}
+.loc-empty{text-align:center;padding:2rem;color:var(--gray-400);font-size:.85rem;}
+.loc-spinner{width:28px;height:28px;border:3px solid var(--gray-200);border-top-color:var(--blue);
+  border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;}
+
 /* LOADING */
 #loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);z-index:999;
   display:none;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;}
@@ -316,7 +352,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
     <li><a href="#" onclick="showLanding()">Check Property</a></li>
     <li><a href="#footer">About</a></li>
   </ul>
-  <a href="https://wa.me/919999999999" class="nav-wa">
+  <a href="https://wa.me/917384949090" class="nav-wa">
     <span>📱</span> WhatsApp Us
   </a>
   <button class="hbg" id="hbg"><span></span><span></span><span></span></button>
@@ -326,18 +362,18 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
   <a href="#how" onclick="closeMob()">How It Works</a>
   <a href="#" onclick="showLanding();closeMob()">Check Property</a>
   <a href="#footer" onclick="closeMob()">About</a>
-  <a href="https://wa.me/919999999999" style="color:#25D366;font-weight:600;">📱 WhatsApp Us →</a>
+  <a href="https://wa.me/917384949090" style="color:#25D366;font-weight:600;">📱 WhatsApp Us →</a>
 </div>
 
 <!-- LOADING -->
 <div id="loading-overlay">
   <div class="spinner"></div>
   <div>
-    <div class="loading-text">Scanning Property...</div>
-    <div class="loading-sub" id="loading-step">Connecting to RERA database...</div>
+    <div class="loading-text">Property Details Save Ho Rahe Hain...</div>
+    <div class="loading-sub" id="loading-step">Property details save ho rahe hain...</div>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-  <div class="step-indicator" id="step-indicator">Step 1 of 4</div>
+  <div class="step-indicator" id="step-indicator">Step 1 of 3</div>
 </div>
 
 <!-- ═══════════ PAGE 1: LANDING ═══════════ -->
@@ -359,42 +395,85 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
 
       <!-- FORM -->
       <div class="check-card">
-        <div class="cc-title">Start Your Property Check</div>
-        <div class="cc-sub">Fill details below to get your free preview</div>
+        <div class="cc-title">Property Fraud Check Karo</div>
+        <div class="cc-sub">Property details bharo — free preview milega</div>
 
+        <!-- State -->
         <div class="form-group">
-          <label class="form-label">Full Name</label>
+          <label class="form-label">State</label>
           <div class="inp-wrap">
-            <span class="inp-ico">👤</span>
-            <input class="f-input" placeholder="Rahul Sharma" id="f-name"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Mobile Number</label>
-          <div class="inp-wrap">
-            <span class="inp-ico">📱</span>
-            <input class="f-input" placeholder="+91 98765 43210" id="f-phone"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Property State</label>
-          <div class="inp-wrap">
-            <span class="inp-ico">📍</span>
-            <select class="f-select" id="f-state">
+            <span class="inp-ico">🗺</span>
+            <select class="f-select" id="f-state" onchange="onStateChange()">
               <option value="">Select State</option>
-              <option>Maharashtra</option><option>Delhi</option><option>Karnataka</option>
-              <option>Telangana</option><option>Tamil Nadu</option><option>Gujarat</option>
-              <option>Uttar Pradesh</option><option>Haryana</option><option>Rajasthan</option>
-              <option>West Bengal</option><option>Punjab</option><option>Other</option>
+              <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+              <option>Chhattisgarh</option><option>Delhi</option><option>Goa</option>
+              <option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option>
+              <option>Jharkhand</option><option>Karnataka</option><option>Kerala</option>
+              <option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option>
+              <option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option>
+              <option>Odisha</option><option>Punjab</option><option>Rajasthan</option>
+              <option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option>
+              <option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option>
+              <option>West Bengal</option><option>Other</option>
             </select>
           </div>
         </div>
+
+        <!-- District -->
         <div class="form-group">
-          <label class="form-label">Plot / Property Number or Address</label>
+          <label class="form-label">District</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">🏛</span>
+            <input class="f-input" placeholder="e.g. Paschim Medinipur" id="f-district"/>
+          </div>
+        </div>
+
+        <!-- City/Town/Village -->
+        <div class="form-group">
+          <label class="form-label">City / Town / Village</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">🏘</span>
+            <input class="f-input" placeholder="e.g. Midnapore" id="f-city"/>
+          </div>
+        </div>
+
+        <!-- Full Property Address -->
+        <div class="form-group">
+          <label class="form-label">Full Property Address</label>
           <div class="inp-wrap">
             <span class="inp-ico">🏠</span>
-            <input class="f-input" placeholder="e.g. Plot 42, Koramangala, Bangalore" id="f-prop"/>
+            <input class="f-input" placeholder="e.g. C 57/1, Aurobindanagar" id="f-prop"/>
           </div>
+        </div>
+
+        <!-- PIN Code -->
+        <div class="form-group">
+          <label class="form-label">PIN Code</label>
+          <div class="inp-wrap">
+            <span class="inp-ico">📮</span>
+            <input class="f-input" placeholder="e.g. 721101" id="f-pin" type="tel" maxlength="6" oninput="onPinInput(this)"/>
+          </div>
+          <div id="pin-info" style="font-size:.75rem;color:var(--green);margin-top:.3rem;display:none;"></div>
+        </div>
+
+        <!-- Property Type -->
+        <div class="form-group">
+          <label class="form-label">Property Type</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+            <label class="prop-type-btn" id="pt-plot" onclick="selectType('Plot')">
+              <span>🏞</span> Plot
+            </label>
+            <label class="prop-type-btn" id="pt-flat" onclick="selectType('Flat/Apartment')">
+              <span>🏢</span> Flat/Apartment
+            </label>
+            <label class="prop-type-btn" id="pt-house" onclick="selectType('House')">
+              <span>🏠</span> House
+            </label>
+            <label class="prop-type-btn" id="pt-commercial" onclick="selectType('Commercial')">
+              <span>🏪</span> Commercial
+            </label>
+          </div>
+          <input type="hidden" id="f-proptype" value=""/>
         </div>
 
         <button class="btn-submit" onclick="runCheck()">
@@ -447,7 +526,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
         <div class="step-num">3</div>
         <div class="step-ico">📊</div>
         <div class="step-t">Free Preview</div>
-        <p class="step-d">See basic results for free — RERA status, court flag, partial fraud score.</p>
+        <p class="step-d">Locality info dekhein free mein — nearby hospitals, schools, banks aur transport.</p>
         <span class="step-arrow">→</span>
       </div>
       <div class="step">
@@ -480,289 +559,283 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
       </div>
       <div class="ft-col">
         <h4>Get In Touch</h4>
-        <div class="ft-contact">📱 +91 98765 43210</div>
-        <div class="ft-contact">📧 hello@propty24.com</div>
+        <div class="ft-contact">📱 +91 73849 49090</div>
+        
         <div class="ft-contact">🕐 Mon–Sat: 10AM – 7PM</div>
       </div>
     </div>
     <div class="ft-bottom">
       <p>© 2025 PROPTY24. All rights reserved.</p>
-      <p>Made with ❤️ in India 🇮🇳 <a href="admin.html" style="color:rgba(255,255,255,0.06);font-size:10px;" title="admin">⚙</a></p>
+      <p>Made with ❤️ in India 🇮🇳 <a href="admin.html" style="color:rgba(255,255,255,0.08);font-size:10px;" title="admin">⚙</a></p>
     </div>
   </footer>
 </div>
 
-
 <!-- ═══════════ PAGE 2: RESULT ═══════════ -->
 <div id="page-result">
   <div class="result-page">
+
+    <!-- Header -->
     <div class="result-header">
       <button class="back-btn" onclick="showLanding()">← Back</button>
       <div>
-        <div class="result-title">Property Analysis Report</div>
-        <div class="result-subtitle" id="result-subtitle">Locality info · Full fraud check 24–48 hrs mein</div>
+        <div class="result-title">Property Check Results</div>
+        <div class="result-subtitle">Locality info · Full report 24–48 hrs mein milegi</div>
       </div>
     </div>
 
-    <!-- Property Info Bar -->
+    <!-- Property Info -->
     <div class="prop-bar">
       <div class="prop-icon">🏠</div>
       <div>
         <div class="prop-addr" id="result-addr">—</div>
         <div class="prop-meta" id="result-meta">—</div>
       </div>
-      <div class="prop-status" id="prop-status">📋 Analyzing...</div>
+      <div class="prop-status">📋 Report Requested</div>
     </div>
 
-    <!-- LOADING STATE -->
+
+    <!-- ── AI ANALYSIS LOADING ── -->
     <div id="analysis-loading" style="background:white;border:1px solid #E2E8F0;border-radius:14px;
-      padding:3rem;text-align:center;margin-bottom:1.5rem;">
-      <div style="width:40px;height:40px;border:4px solid #E2E8F0;border-top-color:#1B4FD8;
-        border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div>
-      <div style="font-weight:600;color:#0F172A;margin-bottom:.4rem;">AI Analysis Ho Rahi Hai...</div>
-      <div style="font-size:.82rem;color:#64748B;">Gemini AI is area ki poori profile generate kar raha hai</div>
+      padding:2rem;text-align:center;margin-bottom:1.5rem;">
+      <div style="width:36px;height:36px;border:4px solid #E2E8F0;border-top-color:#1B4FD8;
+        border-radius:50%;animation:spin 1s linear infinite;margin:0 auto .75rem;"></div>
+      <div style="font-weight:600;color:#0F172A;font-size:.9rem;margin-bottom:.3rem;">AI Analysis Ho Rahi Hai...</div>
+      <div style="font-size:.78rem;color:#64748B;">Gemini AI is area ki poori profile generate kar raha hai</div>
     </div>
 
-    <!-- MAIN ANALYSIS CARD — hidden until data loads -->
-    <div id="analysis-content" style="display:none;">
+    <!-- ── SCORE + ENVIRONMENT + CONNECTIVITY + MARKET + EXPERT ── -->
+    <div id="analysis-cards" style="display:none;">
 
-      <!-- ── LOCALITY SCORE CARD ── -->
-      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;
-        overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
-        <div style="padding:1.2rem 1.5rem;border-bottom:1px solid #F1F5F9;
-          display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+      <!-- Locality Score -->
+      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;overflow:hidden;
+        box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
+        <div style="padding:1.1rem 1.5rem;border-bottom:1px solid #F1F5F9;
+          display:flex;align-items:center;justify-content:space-between;">
           <div style="font-weight:700;font-size:1rem;color:#0F172A;">📊 Locality Score</div>
-          <div style="font-size:.72rem;color:#94A3B8;">AI-powered analysis · 10 parameters</div>
+          <div style="font-size:.72rem;color:#94A3B8;">AI · 10 parameters</div>
         </div>
-        <div style="padding:1.5rem;display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;">
-          <!-- Big Score -->
-          <div style="text-align:center;min-width:100px;">
-            <div id="score-circle" style="width:90px;height:90px;border-radius:50%;
-              border:6px solid #16A34A;display:flex;flex-direction:column;
-              align-items:center;justify-content:center;margin:0 auto;">
-              <div id="score-num" style="font-family:'Poppins',sans-serif;font-size:1.8rem;
-                font-weight:800;color:#0F172A;line-height:1;">—</div>
-              <div style="font-size:.6rem;color:#64748B;font-weight:600;">/ 100</div>
+        <div style="padding:1.5rem;display:grid;grid-template-columns:110px 1fr;gap:1.5rem;align-items:start;">
+          <div style="text-align:center;">
+            <div id="score-circle" style="width:86px;height:86px;border-radius:50%;border:6px solid #16A34A;
+              display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;">
+              <div id="score-num" style="font-family:'Poppins',sans-serif;font-size:1.7rem;font-weight:800;color:#0F172A;line-height:1;">—</div>
+              <div style="font-size:.58rem;color:#64748B;font-weight:600;">/ 100</div>
             </div>
-            <div id="score-grade" style="margin-top:.5rem;font-size:.78rem;font-weight:700;
-              color:#16A34A;">—</div>
+            <div id="score-grade" style="margin-top:.4rem;font-size:.75rem;font-weight:700;color:#16A34A;">—</div>
           </div>
-          <!-- Score Breakdown -->
-          <div id="score-breakdown" style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
-            <div style="color:#94A3B8;font-size:.8rem;text-align:center;">Loading...</div>
+          <div id="score-breakdown" style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;">
+            <div style="color:#94A3B8;font-size:.75rem;">Loading...</div>
           </div>
         </div>
       </div>
 
-      <!-- ── ENVIRONMENT CARD ── -->
-      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;
-        overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
-        <div style="padding:1.2rem 1.5rem;border-bottom:1px solid #F1F5F9;">
+      <!-- Environment -->
+      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;overflow:hidden;
+        box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
+        <div style="padding:1.1rem 1.5rem;border-bottom:1px solid #F1F5F9;">
           <div style="font-weight:700;font-size:1rem;color:#0F172A;">🌿 Environment & Risk</div>
         </div>
         <div id="environment-content" style="padding:1.2rem 1.5rem;
           display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
-          <div style="color:#94A3B8;font-size:.8rem;">Loading...</div>
+          <div style="color:#94A3B8;font-size:.75rem;">Loading...</div>
         </div>
       </div>
 
-      <!-- ── CONNECTIVITY CARD ── -->
-      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;
-        overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
-        <div style="padding:1.2rem 1.5rem;border-bottom:1px solid #F1F5F9;">
+      <!-- Connectivity -->
+      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;overflow:hidden;
+        box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
+        <div style="padding:1.1rem 1.5rem;border-bottom:1px solid #F1F5F9;">
           <div style="font-weight:700;font-size:1rem;color:#0F172A;">🚌 Connectivity</div>
         </div>
         <div id="connectivity-content" style="padding:1.2rem 1.5rem;
           display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;">
-          <div style="color:#94A3B8;font-size:.8rem;">Loading...</div>
+          <div style="color:#94A3B8;font-size:.75rem;">Loading...</div>
         </div>
       </div>
 
-      <!-- ── MARKET INSIGHTS ── -->
-      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;
-        overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
-        <div style="padding:1.2rem 1.5rem;border-bottom:1px solid #F1F5F9;
+      <!-- Market Insights -->
+      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;overflow:hidden;
+        box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
+        <div style="padding:1.1rem 1.5rem;border-bottom:1px solid #F1F5F9;
           display:flex;align-items:center;justify-content:space-between;">
           <div style="font-weight:700;font-size:1rem;color:#0F172A;">💰 Market Insights</div>
-          <div id="market-trend-badge" style="font-size:.75rem;font-weight:700;padding:.25rem .7rem;
+          <div id="market-trend-badge" style="font-size:.72rem;font-weight:700;padding:.2rem .7rem;
             border-radius:100px;background:#DCFCE7;color:#16A34A;">📈 Rising</div>
         </div>
         <div id="market-content" style="padding:1.2rem 1.5rem;
           display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
-          <div style="color:#94A3B8;font-size:.8rem;">Loading...</div>
+          <div style="color:#94A3B8;font-size:.75rem;">Loading...</div>
         </div>
-        <!-- View listings links -->
-        <div style="padding:1rem 1.5rem;border-top:1px solid #F1F5F9;
-          display:flex;gap:.75rem;flex-wrap:wrap;">
-          <div style="font-size:.78rem;color:#64748B;font-weight:600;align-self:center;">
-            🏠 Nearby Listings:
-          </div>
-          <a id="link-99acres" href="#" target="_blank"
-            style="display:inline-flex;align-items:center;gap:.3rem;background:#FF6B35;
-            color:white;padding:.4rem .9rem;border-radius:6px;font-size:.75rem;
-            font-weight:700;text-decoration:none;">
-            99acres →
-          </a>
-          <a id="link-magicbricks" href="#" target="_blank"
-            style="display:inline-flex;align-items:center;gap:.3rem;background:#E41B23;
-            color:white;padding:.4rem .9rem;border-radius:6px;font-size:.75rem;
-            font-weight:700;text-decoration:none;">
-            MagicBricks →
-          </a>
-          <a id="link-housing" href="#" target="_blank"
-            style="display:inline-flex;align-items:center;gap:.3rem;background:#1B4FD8;
-            color:white;padding:.4rem .9rem;border-radius:6px;font-size:.75rem;
-            font-weight:700;text-decoration:none;">
-            Housing.com →
-          </a>
+        <div style="padding:.9rem 1.5rem;border-top:1px solid #F1F5F9;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;">
+          <span style="font-size:.75rem;color:#64748B;font-weight:600;">🏠 Nearby Listings:</span>
+          <a id="link-99acres" href="#" target="_blank" style="background:#FF6B35;color:white;
+            padding:.35rem .8rem;border-radius:5px;font-size:.72rem;font-weight:700;text-decoration:none;">99acres →</a>
+          <a id="link-magicbricks" href="#" target="_blank" style="background:#E41B23;color:white;
+            padding:.35rem .8rem;border-radius:5px;font-size:.72rem;font-weight:700;text-decoration:none;">MagicBricks →</a>
+          <a id="link-housing" href="#" target="_blank" style="background:#1B4FD8;color:white;
+            padding:.35rem .8rem;border-radius:5px;font-size:.72rem;font-weight:700;text-decoration:none;">Housing.com →</a>
         </div>
       </div>
 
-      <!-- ── NEARBY PLACES ── -->
-      <div class="locality-section" style="margin-bottom:1.5rem;">
-        <div class="locality-header">
-          <div class="locality-title">🗺️ Nearby Places <span style="font-size:.72rem;font-weight:400;color:#94A3B8;margin-left:.3rem;">FREE · AI Data</span></div>
-        </div>
-        <div class="locality-tabs" id="locality-tabs">
-          <div class="loc-tab active" onclick="switchTab('healthcare')" id="tab-healthcare">🏥 Healthcare <span class="tab-count" id="cnt-healthcare">—</span></div>
-          <div class="loc-tab" onclick="switchTab('education')" id="tab-education">🎓 Education <span class="tab-count" id="cnt-education">—</span></div>
-          <div class="loc-tab" onclick="switchTab('food')" id="tab-food">🍽️ Food <span class="tab-count" id="cnt-food">—</span></div>
-          <div class="loc-tab" onclick="switchTab('grocery')" id="tab-grocery">🛒 Grocery <span class="tab-count" id="cnt-grocery">—</span></div>
-          <div class="loc-tab" onclick="switchTab('finance')" id="tab-finance">🏦 Finance <span class="tab-count" id="cnt-finance">—</span></div>
-          <div class="loc-tab" onclick="switchTab('transport')" id="tab-transport">🚌 Transport <span class="tab-count" id="cnt-transport">—</span></div>
-          <div class="loc-tab" onclick="switchTab('shopping')" id="tab-shopping">🛍️ Shopping <span class="tab-count" id="cnt-shopping">—</span></div>
-          <div class="loc-tab" onclick="switchTab('fitness')" id="tab-fitness">💪 Fitness <span class="tab-count" id="cnt-fitness">—</span></div>
-          <div class="loc-tab" onclick="switchTab('parks')" id="tab-parks">🌳 Parks <span class="tab-count" id="cnt-parks">—</span></div>
-          <div class="loc-tab" onclick="switchTab('worship')" id="tab-worship">🙏 Worship <span class="tab-count" id="cnt-worship">—</span></div>
-          <div class="loc-tab" onclick="switchTab('utilities')" id="tab-utilities">⛽ Utilities <span class="tab-count" id="cnt-utilities">—</span></div>
-          <div class="loc-tab" onclick="switchTab('safety')" id="tab-safety">👮 Safety <span class="tab-count" id="cnt-safety">—</span></div>
-        </div>
-        <div class="locality-body" id="locality-body">
-          <div class="loc-loading"><div class="loc-spinner"></div>Loading places...</div>
-        </div>
-      </div>
-
-      <!-- ── EXPERT VERDICT ── -->
-      <div id="expert-card" style="background:white;border:1px solid #E2E8F0;border-radius:14px;
-        overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
-        <div style="padding:1.2rem 1.5rem;border-bottom:1px solid #F1F5F9;">
+      <!-- Expert Verdict -->
+      <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;overflow:hidden;
+        box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:1.5rem;">
+        <div style="padding:1.1rem 1.5rem;border-bottom:1px solid #F1F5F9;">
           <div style="font-weight:700;font-size:1rem;color:#0F172A;">🧠 Expert Verdict</div>
         </div>
         <div id="expert-content" style="padding:1.5rem;">
-          <div style="color:#94A3B8;font-size:.8rem;">Loading...</div>
+          <div style="color:#94A3B8;font-size:.75rem;">Loading...</div>
         </div>
       </div>
 
-      <!-- ── FRAUD CHECK LOCKED ── -->
-      <div style="position:relative;margin-bottom:1.5rem;">
-        <div style="background:white;border:1px solid #E2E8F0;border-radius:14px;
-          overflow:hidden;filter:blur(3px);opacity:.4;pointer-events:none;">
-          <div style="padding:1rem 1.5rem;border-bottom:1px solid #F1F5F9;font-weight:700;">🔍 Government Database Check</div>
-          <div style="padding:1rem 1.5rem;">
-            <div style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;border-bottom:1px solid #F8FAFC;">
-              <div style="width:36px;height:36px;background:#DCFCE7;border-radius:8px;display:flex;align-items:center;justify-content:center;">✅</div>
-              <div><div style="font-weight:600;font-size:.88rem;">RERA Registration</div><div style="font-size:.75rem;color:#64748B;">Builder/Project verification</div></div>
-              <div style="margin-left:auto;font-size:.75rem;font-weight:700;color:#16A34A;">Registered</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;border-bottom:1px solid #F8FAFC;">
-              <div style="width:36px;height:36px;background:#FEE2E2;border-radius:8px;display:flex;align-items:center;justify-content:center;">⚖️</div>
-              <div><div style="font-weight:600;font-size:.88rem;">Court Cases</div><div style="font-size:.75rem;color:#64748B;">District + High Court scan</div></div>
-              <div style="margin-left:auto;font-size:.75rem;font-weight:700;color:#DC2626;">1 Case Found</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;">
-              <div style="width:36px;height:36px;background:#F1F5F9;border-radius:8px;display:flex;align-items:center;justify-content:center;">📜</div>
-              <div><div style="font-weight:600;font-size:.88rem;">Ownership History</div><div style="font-size:.75rem;color:#64748B;">30-year title chain</div></div>
-              <div style="margin-left:auto;font-size:.75rem;font-weight:700;color:#64748B;">Hidden</div>
-            </div>
-          </div>
+    </div><!-- end analysis-cards -->
+
+    <!-- LOCALITY INFO SECTION — shown first, real data -->
+    <div class="locality-section" id="locality-section" style="margin-bottom:1.5rem;">
+      <div class="locality-header">
+        <div class="locality-title">🗺️ Locality Info <span style="font-size:.72rem;font-weight:400;color:var(--gray-400);margin-left:.3rem;">FREE</span></div>
+        <div style="font-size:.75rem;color:var(--gray-400);">3km radius · OpenStreetMap data</div>
+      </div>
+      <div class="locality-tabs" id="locality-tabs">
+        <div class="loc-tab active" onclick="switchTab('healthcare')" id="tab-healthcare">🏥 Healthcare <span class="tab-count" id="cnt-healthcare">—</span></div>
+        <div class="loc-tab" onclick="switchTab('education')" id="tab-education">🎓 Education <span class="tab-count" id="cnt-education">—</span></div>
+        <div class="loc-tab" onclick="switchTab('food')" id="tab-food">🍽️ Food <span class="tab-count" id="cnt-food">—</span></div>
+        <div class="loc-tab" onclick="switchTab('grocery')" id="tab-grocery">🛒 Grocery <span class="tab-count" id="cnt-grocery">—</span></div>
+        <div class="loc-tab" onclick="switchTab('finance')" id="tab-finance">🏦 Finance <span class="tab-count" id="cnt-finance">—</span></div>
+        <div class="loc-tab" onclick="switchTab('transport')" id="tab-transport">🚌 Transport <span class="tab-count" id="cnt-transport">—</span></div>
+        <div class="loc-tab" onclick="switchTab('shopping')" id="tab-shopping">🛍️ Shopping <span class="tab-count" id="cnt-shopping">—</span></div>
+        <div class="loc-tab" onclick="switchTab('fitness')" id="tab-fitness">💪 Fitness <span class="tab-count" id="cnt-fitness">—</span></div>
+        <div class="loc-tab" onclick="switchTab('parks')" id="tab-parks">🌳 Parks <span class="tab-count" id="cnt-parks">—</span></div>
+        <div class="loc-tab" onclick="switchTab('worship')" id="tab-worship">🙏 Worship <span class="tab-count" id="cnt-worship">—</span></div>
+        <div class="loc-tab" onclick="switchTab('utilities')" id="tab-utilities">⛽ Utilities <span class="tab-count" id="cnt-utilities">—</span></div>
+        <div class="loc-tab" onclick="switchTab('safety')" id="tab-safety">👮 Safety <span class="tab-count" id="cnt-safety">—</span></div>
+      </div>
+      <div class="locality-body" id="locality-body">
+        <div class="loc-loading"><div class="loc-spinner"></div>Nearby places fetch ho rahe hain...</div>
+      </div>
+    </div>
+
+    <!-- HONEST INFO BANNER -->
+    <div style="background:#FFF7ED;border:1.5px solid rgba(234,88,12,.25);border-radius:12px;
+      padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1rem;">
+      <div style="font-size:1.5rem;flex-shrink:0;">🔍</div>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;color:#9A3412;margin-bottom:.3rem;">
+          Full Verification Manually Hogi
         </div>
-        <div style="position:absolute;inset:0;display:flex;flex-direction:column;
-          align-items:center;justify-content:center;padding:2rem;text-align:center;">
-          <div style="font-size:2rem;margin-bottom:.5rem;">🔒</div>
-          <div style="font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;
-            color:#0F172A;margin-bottom:.3rem;">Fraud Check Locked</div>
-          <div style="font-size:.82rem;color:#64748B;max-width:280px;line-height:1.6;">
-            RERA, Court Cases, Ownership History, Encumbrance — unlock karo
-          </div>
+        <div style="font-size:.82rem;color:#C2410C;line-height:1.7;">
+          RERA registration, court cases, ownership history aur encumbrance — yeh sab government portals se manually verify hoti hai.<br/>
+          <strong>Hamari team 24–48 hours mein aapko complete verified report bhejegi.</strong>
         </div>
       </div>
+    </div>
 
-      <!-- ── UNLOCK PLANS ── -->
-      <div style="margin-bottom:2rem;">
-        <div style="font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;
-          color:#0F172A;margin-bottom:.25rem;">🔓 Unlock Full Fraud Report</div>
-        <div style="font-size:.85rem;color:#64748B;margin-bottom:1.5rem;">
-          One-time · Delivered on WhatsApp + Email as PDF
-        </div>
-        <div class="plans-grid">
-          <div class="plan-card">
-            <div class="plan-name">Basic</div>
-            <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
-              <span style="font-size:1rem;color:#94A3B8;text-decoration:line-through;">₹398</span>
-              <span class="plan-price" style="color:#1B4FD8;"><sup>₹</sup>199</span>
-            </div>
-            <div class="plan-desc" style="color:#16A34A;font-weight:700;">🎉 50% OFF</div>
-            <ul class="plan-features">
-              <li>Ownership History</li>
-              <li>Court Case Check</li>
-              <li>RERA Status</li>
-              <li>PDF Report (English)</li>
-              <li>WhatsApp Delivery</li>
-            </ul>
-            <button class="btn-unlock btn-outline-u" onclick="goGetReport('Basic', 199)">Get Report — ₹199</button>
-          </div>
-          <div class="plan-card popular">
-            <div class="popular-tag">⭐ Most Popular</div>
-            <div class="plan-name">Standard</div>
-            <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
-              <span style="font-size:1rem;color:#94A3B8;text-decoration:line-through;">₹598</span>
-              <span class="plan-price" style="color:#1B4FD8;"><sup>₹</sup>299</span>
-            </div>
-            <div class="plan-desc" style="color:#16A34A;font-weight:700;">🎉 50% OFF</div>
-            <ul class="plan-features">
-              <li>Everything in Basic</li>
-              <li>Encumbrance Certificate</li>
-              <li>Map Boundary Check</li>
-              <li>Hindi + English Report</li>
-              <li>Priority Processing</li>
-            </ul>
-            <button class="btn-unlock btn-blue-u" onclick="goGetReport('Standard', 299)">Get Report — ₹299 ⭐</button>
-          </div>
-          <div class="plan-card">
-            <div class="plan-name">Full Shield</div>
-            <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
-              <span style="font-size:1rem;color:#94A3B8;text-decoration:line-through;">₹998</span>
-              <span class="plan-price" style="color:#1B4FD8;"><sup>₹</sup>499</span>
-            </div>
-            <div class="plan-desc" style="color:#16A34A;font-weight:700;">🎉 50% OFF</div>
-            <ul class="plan-features">
-              <li>Everything in Standard</li>
-              <li>30-min Expert Call</li>
-              <li>Property Valuation</li>
-              <li>Court-Ready Document</li>
-              <li>Re-check in 7 Days</li>
-            </ul>
-            <button class="btn-unlock btn-outline-u" onclick="goGetReport('Full Shield', 499)">Get Report — ₹499</button>
-          </div>
+    <!-- LOCKED SECTION -->
+    <div style="position:relative;margin-bottom:1.5rem;">
+      <!-- Blurred rows behind -->
+      <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:14px;
+        overflow:hidden;filter:blur(4px);opacity:.4;pointer-events:none;">
+        <div class="check-row"><div class="cr-icon gray">📜</div><div class="cr-info"><div class="cr-title">Ownership History</div><div class="cr-sub">30 year chain of title</div></div><div class="cr-result"><div class="result-pill" style="background:#F1F5F9;color:#64748B;">Checking...</div></div></div>
+        <div class="check-row"><div class="cr-icon gray">🏦</div><div class="cr-info"><div class="cr-title">Encumbrance Certificate</div><div class="cr-sub">Loan & legal dues</div></div><div class="cr-result"><div class="result-pill" style="background:#F1F5F9;color:#64748B;">Checking...</div></div></div>
+        <div class="check-row"><div class="cr-icon gray">💰</div><div class="cr-info"><div class="cr-title">Property Valuation</div><div class="cr-sub">Current market value</div></div><div class="cr-result"><div class="result-pill" style="background:#F1F5F9;color:#64748B;">Checking...</div></div></div>
+        <div class="check-row"><div class="cr-icon gray">👨‍💼</div><div class="cr-info"><div class="cr-title">Expert Analysis</div><div class="cr-sub">Legal expert verdict</div></div><div class="cr-result"><div class="result-pill" style="background:#F1F5F9;color:#64748B;">Pending...</div></div></div>
+      </div>
+      <!-- Lock overlay -->
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;
+        align-items:center;justify-content:center;padding:2rem;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:.6rem;">🔒</div>
+        <div style="font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:700;
+          color:var(--gray-900);margin-bottom:.4rem;">4 More Checks Locked</div>
+        <div style="font-size:.83rem;color:var(--gray-500);max-width:300px;line-height:1.6;">
+          Unlock full report to see Ownership History, Encumbrance, Valuation + Expert Analysis
         </div>
       </div>
+    </div>
 
-      <!-- WhatsApp CTA -->
-      <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid rgba(22,163,74,.2);
-        border-radius:12px;padding:1.5rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;">
-        <div style="font-size:2rem;">📱</div>
-        <div style="flex:1;">
-          <div style="font-weight:700;font-size:.95rem;color:#0F172A;margin-bottom:.2rem;">Koi sawaal hai? WhatsApp karo!</div>
-          <div style="font-size:.82rem;color:#64748B;">Mon–Sat 10AM–7PM · Usually replies in 5 minutes</div>
+    <!-- UNLOCK PLANS -->
+    <div class="unlock-section">
+      <div class="unlock-title">Choose Your Plan to Unlock Full Report</div>
+      <div class="unlock-sub">One-time payment • Instant on WhatsApp • No subscription</div>
+      <div class="plans-grid">
+
+        <!-- Basic -->
+        <div class="plan-card">
+          <div class="plan-name">Basic</div>
+          <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
+            <span style="font-size:1rem;color:var(--gray-400);text-decoration:line-through;font-weight:500;">₹398</span>
+            <span class="plan-price" style="color:var(--blue)"><sup>₹</sup>199</span>
+          </div>
+          <div class="plan-desc" style="color:var(--green);font-weight:700;">🎉 50% OFF — Limited Time!</div>
+          <ul class="plan-features">
+            <li>Ownership History</li>
+            <li>Court Case Check</li>
+            <li>RERA Status</li>
+            <li>PDF Report (English)</li>
+            <li>WhatsApp Delivery</li>
+          </ul>
+          <button class="btn-unlock btn-outline-u" onclick="goGetReport('Basic', 199)">Get Report — ₹199</button>
         </div>
-        <a href="https://wa.me/917384949090" style="display:inline-flex;align-items:center;gap:.5rem;
-          background:#25D366;color:white;padding:.7rem 1.3rem;border-radius:8px;
-          font-weight:700;font-size:.85rem;text-decoration:none;white-space:nowrap;">
-          💬 WhatsApp Now
-        </a>
-      </div>
 
-    </div><!-- end analysis-content -->
+        <!-- Standard (Popular) -->
+        <div class="plan-card popular">
+          <div class="popular-tag">⭐ Most Popular</div>
+          <div class="plan-name">Standard</div>
+          <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
+            <span style="font-size:1rem;color:var(--gray-400);text-decoration:line-through;font-weight:500;">₹598</span>
+            <span class="plan-price" style="color:var(--blue)"><sup>₹</sup>299</span>
+          </div>
+          <div class="plan-desc" style="color:var(--green);font-weight:700;">🎉 50% OFF — Limited Time!</div>
+          <ul class="plan-features">
+            <li>Everything in Basic</li>
+            <li>Encumbrance Certificate</li>
+            <li>Map Boundary Check</li>
+            <li>Hindi + English Report</li>
+            <li>Priority Processing</li>
+          </ul>
+          <button class="btn-unlock btn-blue-u" onclick="goGetReport('Standard', 299)">Get Report — ₹299 ⭐</button>
+        </div>
+
+        <!-- Full Shield -->
+        <div class="plan-card">
+          <div class="plan-name">Full Shield</div>
+          <div style="display:flex;align-items:baseline;gap:.5rem;justify-content:center;margin:.3rem 0;">
+            <span style="font-size:1rem;color:var(--gray-400);text-decoration:line-through;font-weight:500;">₹998</span>
+            <span class="plan-price" style="color:var(--blue)"><sup>₹</sup>499</span>
+          </div>
+          <div class="plan-desc" style="color:var(--green);font-weight:700;">🎉 50% OFF — Limited Time!</div>
+          <ul class="plan-features">
+            <li>Everything in Standard</li>
+            <li>30-min Expert Call</li>
+            <li>Property Valuation</li>
+            <li>Court-Ready Document</li>
+            <li>Re-check in 7 Days</li>
+          </ul>
+          <button class="btn-unlock btn-outline-u" onclick="goGetReport('Full Shield', 499)">Get Report — ₹499</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WhatsApp CTA -->
+    <div style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid rgba(22,163,74,.2);
+      border-radius:12px;padding:1.5rem;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;">
+      <div style="font-size:2rem;">📱</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:.95rem;color:var(--gray-900);margin-bottom:.2rem;">
+          Koi sawaal hai? WhatsApp karo!
+        </div>
+        <div style="font-size:.82rem;color:var(--gray-500);">
+          Mon–Sat 10AM–7PM · Usually replies in 5 minutes
+        </div>
+      </div>
+      <a href="https://wa.me/917384949090" style="display:inline-flex;align-items:center;gap:.5rem;
+        background:#25D366;color:var(--white);padding:.7rem 1.3rem;border-radius:8px;
+        font-weight:700;font-size:.85rem;text-decoration:none;white-space:nowrap;transition:all .2s;">
+        💬 WhatsApp Now
+      </a>
+    </div>
+
   </div>
 </div>
 
@@ -775,17 +848,46 @@ function closeMob(){hbg.classList.remove('open');mob.classList.remove('show');}
 function showLanding(){
   document.getElementById('page-landing').style.display='block';
   document.getElementById('page-result').style.display='none';
+  if(document.getElementById('page-thankyou')) document.getElementById('page-thankyou').style.display='none';
+  if(document.getElementById('email-modal')) document.getElementById('email-modal').style.display='none';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // LOADING SIMULATION
 const steps=[
-  {text:'Connecting to RERA database...',step:'Step 1 of 4',pct:20},
-  {text:'Scanning court records...',step:'Step 2 of 4',pct:45},
-  {text:'Checking ownership history...',step:'Step 3 of 4',pct:70},
-  {text:'Generating fraud risk score...',step:'Step 4 of 4',pct:95},
+  {text:'Property details save ho rahe hain...',step:'Step 1 of 3',pct:30},
+  {text:'Locality aur nearby area check ho raha hai...',step:'Step 2 of 3',pct:65},
+  {text:'Report request queue mein ja rahi hai...',step:'Step 3 of 3',pct:95},
 ];
 
+function onStateChange(){}
+function selectType(type){
+  document.getElementById('f-proptype').value=type;
+  ['plot','flat','house','commercial'].forEach(t=>document.getElementById('pt-'+t).classList.remove('active'));
+  const map={Plot:'plot','Flat/Apartment':'flat',House:'house',Commercial:'commercial'};
+  if(map[type]) document.getElementById('pt-'+map[type]).classList.add('active');
+}
+async function onPinInput(el){
+  const pin=el.value.trim();
+  const info=document.getElementById('pin-info');
+  if(pin.length===6){
+    try{
+      const r=await fetch('https://api.postalpincode.in/pincode/'+pin);
+      const d=await r.json();
+      if(d[0].Status==='Success'){
+        const p=d[0].PostOffice[0];
+        info.style.display='block';
+        info.textContent='✅ '+p.District+', '+p.State;
+        if(!document.getElementById('f-district').value) document.getElementById('f-district').value=p.District;
+        if(!document.getElementById('f-city').value) document.getElementById('f-city').value=p.Block||p.Name;
+        if(!document.getElementById('f-state').value||document.getElementById('f-state').value==='') {
+          const sel=document.getElementById('f-state');
+          for(let i=0;i<sel.options.length;i++){if(sel.options[i].text===p.State){sel.selectedIndex=i;break;}}
+        }
+      }else{info.style.display='block';info.style.color='var(--red)';info.textContent='❌ Invalid PIN code';}
+    }catch(e){info.style.display='none';}
+  }else{info.style.display='none';}
+}
 function runCheck(){
   const state=document.getElementById('f-state').value;
   const district=document.getElementById('f-district').value.trim();
@@ -798,21 +900,20 @@ function runCheck(){
   }
   if(pin.length!==6){alert('Valid 6-digit PIN Code daalo.');return;}
   const fullAddress=prop+', '+city+', '+district+', '+state+' - '+pin;
+  // Store globally — name/phone/email payment pe lenge
   window._userData = { name:'', phone:'', email:'', state, district, city, prop, pin, proptype, fullAddress };
+
+  // Store for result page
   document.getElementById('result-addr').textContent=fullAddress;
   document.getElementById('result-meta').textContent=proptype+' · '+city+', '+district+', '+state;
 
+  // Show loading
   const overlay=document.getElementById('loading-overlay');
   const fill=document.getElementById('progress-fill');
   const stepEl=document.getElementById('loading-step');
   const stepInd=document.getElementById('step-indicator');
   overlay.classList.add('show');
 
-  const steps=[
-    {text:'Property details save ho rahe hain...',step:'Step 1 of 3',pct:30},
-    {text:'AI locality analysis shuru ho rahi hai...',step:'Step 2 of 3',pct:65},
-    {text:'Report request queue mein ja rahi hai...',step:'Step 3 of 3',pct:95},
-  ];
   let i=0;
   function nextStep(){
     if(i>=steps.length){
@@ -822,12 +923,9 @@ function runCheck(){
         document.getElementById('page-landing').style.display='none';
         document.getElementById('page-result').style.display='block';
         window.scrollTo({top:0,behavior:'smooth'});
-        // Log search
-        fetch(API_URL+'/api/log-search',{method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({address:fullAddress,state,district,city,proptype,pin})}).catch(()=>{});
-        // Fetch locality + score
-        fetchLocality(fullAddress);
-      },400);
+        // Fetch locality data
+        fetchLocality(window._userData.fullAddress);
+      },500);
       return;
     }
     stepEl.textContent=steps[i].text;
@@ -839,11 +937,15 @@ function runCheck(){
   nextStep();
 }
 
+
+const API_URL = 'https://propty24backend.ritammitra2003.workers.dev';
+
 async function goGetReport(plan, amount) {
   const ud = window._userData;
   if(!ud){ alert('Please fill the form first.'); showLanding(); return; }
   document.getElementById('email-modal').style.display='flex';
   document.getElementById('modal-plan').textContent = plan + ' — ₹' + amount;
+  document.getElementById('modal-plan-amount').textContent = amount;
   document.getElementById('modal-name').value='';
   document.getElementById('modal-phone').value='';
   document.getElementById('modal-email').value='';
@@ -859,16 +961,31 @@ async function submitReport(plan, amount) {
   if(!email.includes('@')){alert('Valid email daalo!');return;}
   ud.name=name; ud.phone=phone; ud.email=email;
   const btn = document.getElementById('modal-confirm-btn');
-  btn.disabled = true; btn.textContent = 'Saving...';
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
   try {
     await fetch(API_URL + '/api/create-order', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone, email, property_address: ud.fullAddress, plan, amount })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: ud.name,
+        phone: ud.phone,
+        email: ud.email,
+        property_address: ud.fullAddress,
+        plan: plan,
+        amount: amount
+      })
     });
-  } catch(err) {}
+  } catch(err) { /* continue anyway */ }
+
   document.getElementById('email-modal').style.display='none';
-  const now = new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true,day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
-  const waMsg = encodeURIComponent(`🏠 *New PROPTY24 Request!*
+
+  // WhatsApp message to admin
+  const now = new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',hour12:true,
+    day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  const waMsg = encodeURIComponent(
+`🏠 *New PROPTY24 Request!*
 
 👤 *Name:* ${name}
 📱 *Phone:* ${phone}
@@ -877,8 +994,10 @@ async function submitReport(plan, amount) {
 📋 *Plan:* ${plan} (₹${amount})
 ⏰ *Time:* ${now}
 
-_Please send payment QR._`);
+_Please send payment QR and verify._`
+  );
   window.open('https://wa.me/917384949090?text=' + waMsg, '_blank');
+
   showThankYouPage(plan, amount);
 }
 
@@ -894,27 +1013,37 @@ function showThankYouPage(plan, amount) {
 
 function goPayment(amount,plan){ goGetReport(plan, amount); }
 
-document.querySelectorAll('.mob-menu a').forEach(a=>a.addEventListener('click',closeMob));
 
-
-const API_URL = 'https://propty24backend.ritammitra2003.workers.dev';
+// ── LOCALITY / NEARBY PLACES ──
 let _localityData = {};
 let _activeTab = 'healthcare';
-let _analysisData = null;
 
 async function fetchLocality(address) {
   try {
     const res = await fetch(API_URL + '/api/nearby?address=' + encodeURIComponent(address));
     const data = await res.json();
     if (data.success && data.data) {
-      _analysisData = data.data;
-      renderAnalysis(data.data);
+      // New format with full analysis
+      const d = data.data;
+      _localityData = d.nearby_places || {};
+      renderAnalysis(d);
+      updateTabCounts();
+      renderTab(_activeTab);
+    } else if (data.success && data.places) {
+      // Old format fallback
+      _localityData = data.places;
+      updateTabCounts();
+      renderTab(_activeTab);
+    } else {
+      document.getElementById('locality-body').innerHTML =
+        '<div class="loc-empty">📍 Is area ka data available nahi hai abhi.</div>';
     }
   } catch(e) {
-    console.error('Locality fetch error:', e);
+    document.getElementById('locality-body').innerHTML =
+      '<div class="loc-empty">⚠️ Locality data load nahi ho saka.</div>';
   } finally {
     document.getElementById('analysis-loading').style.display = 'none';
-    document.getElementById('analysis-content').style.display = 'block';
+    document.getElementById('analysis-cards').style.display = 'block';
   }
 }
 
@@ -922,34 +1051,30 @@ function renderAnalysis(d) {
   // Score
   const ls = d.locality_score;
   if (ls) {
-    const num = document.getElementById('score-num');
-    const circle = document.getElementById('score-circle');
-    const grade = document.getElementById('score-grade');
-    num.textContent = ls.total || '—';
-    grade.textContent = ls.grade || '';
-    const colors = { excellent: '#16A34A', good: '#16A34A', average: '#EA580C', poor: '#DC2626' };
-    const c = colors[(ls.grade||'').toLowerCase()] || '#1B4FD8';
-    circle.style.borderColor = c;
-    num.style.color = c;
-    grade.style.color = c;
-    // Breakdown
+    const scoreNum = document.getElementById('score-num');
+    const scoreCircle = document.getElementById('score-circle');
+    const scoreGrade = document.getElementById('score-grade');
+    scoreNum.textContent = ls.total || '—';
+    scoreGrade.textContent = ls.grade || '';
+    const t = ls.total || 0;
+    const c = t >= 80 ? '#16A34A' : t >= 60 ? '#EA580C' : '#DC2626';
+    scoreCircle.style.borderColor = c;
+    scoreNum.style.color = c;
+    scoreGrade.style.color = c;
     const bd = ls.breakdown || {};
-    const keys = Object.keys(bd);
-    document.getElementById('score-breakdown').innerHTML = keys.map(k => {
+    document.getElementById('score-breakdown').innerHTML = Object.keys(bd).map(k => {
       const item = bd[k];
       const pct = Math.round((item.score / item.max) * 100);
-      const bc = pct >= 70 ? '#DCFCE7' : pct >= 50 ? '#FFF7ED' : '#FEE2E2';
-      const tc = pct >= 70 ? '#16A34A' : pct >= 50 ? '#EA580C' : '#DC2626';
-      return `<div style="background:#F8FAFC;border-radius:8px;padding:.6rem .8rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;">
-          <span style="font-size:.72rem;font-weight:600;color:#334155;text-transform:capitalize;">${k.replace('_',' ')}</span>
-          <span style="font-size:.7rem;font-weight:700;background:${bc};color:${tc};
-            padding:.1rem .4rem;border-radius:4px;">${item.score}/${item.max}</span>
+      const bc = pct >= 70 ? '#16A34A' : pct >= 50 ? '#EA580C' : '#DC2626';
+      return `<div style="background:#F8FAFC;border-radius:7px;padding:.5rem .7rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:.25rem;">
+          <span style="font-size:.68rem;font-weight:600;color:#334155;text-transform:capitalize;">${k.replace(/_/g,' ')}</span>
+          <span style="font-size:.68rem;font-weight:700;color:${bc};">${item.score}/${item.max}</span>
         </div>
-        <div style="height:4px;background:#E2E8F0;border-radius:2px;overflow:hidden;">
-          <div style="height:100%;background:${tc};border-radius:2px;width:${pct}%;"></div>
+        <div style="height:3px;background:#E2E8F0;border-radius:2px;overflow:hidden;">
+          <div style="height:100%;background:${bc};width:${pct}%;"></div>
         </div>
-        <div style="font-size:.65rem;color:#94A3B8;margin-top:.2rem;">${item.note||''}</div>
+        <div style="font-size:.62rem;color:#94A3B8;margin-top:.15rem;">${item.note||''}</div>
       </div>`;
     }).join('');
   }
@@ -957,23 +1082,23 @@ function renderAnalysis(d) {
   // Environment
   const env = d.environment;
   if (env) {
-    const aqiColors = { good: '#16A34A', moderate: '#EA580C', unhealthy: '#DC2626' };
-    const aqiC = aqiColors[(env.aqi_category||'').toLowerCase()] || '#EA580C';
+    const aqiC = (env.aqi_category||'').toLowerCase().includes('good') ? '#16A34A' :
+                 (env.aqi_category||'').toLowerCase().includes('mod') ? '#EA580C' : '#DC2626';
     document.getElementById('environment-content').innerHTML = `
-      <div style="background:#F8FAFC;border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:.65rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Air Quality</div>
-        <div style="font-size:1.5rem;font-weight:800;color:${aqiC};">${env.aqi_estimate||'—'}</div>
-        <div style="font-size:.72rem;font-weight:600;color:${aqiC};">${env.aqi_category||'—'}</div>
+      <div style="background:#F8FAFC;border-radius:9px;padding:.9rem;text-align:center;">
+        <div style="font-size:.62rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Air Quality (AQI)</div>
+        <div style="font-size:1.4rem;font-weight:800;color:${aqiC};">${env.aqi_estimate||'—'}</div>
+        <div style="font-size:.7rem;font-weight:600;color:${aqiC};">${env.aqi_category||'—'}</div>
       </div>
-      <div style="background:#F8FAFC;border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:.65rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Flood Risk</div>
-        <div style="font-size:1.1rem;font-weight:800;color:${env.flood_risk==='Low'?'#16A34A':'#DC2626'};">${env.flood_risk||'—'}</div>
-        <div style="font-size:.72rem;color:#64748B;">Earthquake: ${env.earthquake_zone||'—'}</div>
+      <div style="background:#F8FAFC;border-radius:9px;padding:.9rem;text-align:center;">
+        <div style="font-size:.62rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Flood Risk</div>
+        <div style="font-size:1rem;font-weight:800;color:${env.flood_risk==='Low'?'#16A34A':'#DC2626'};">${env.flood_risk||'—'}</div>
+        <div style="font-size:.7rem;color:#64748B;">Zone: ${env.earthquake_zone||'—'}</div>
       </div>
-      <div style="background:#F8FAFC;border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:.65rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Environment</div>
-        <div style="font-size:1rem;font-weight:700;color:#334155;">🌳 ${env.green_cover||'—'}</div>
-        <div style="font-size:.72rem;color:#64748B;">Noise: ${env.noise_level||'—'}</div>
+      <div style="background:#F8FAFC;border-radius:9px;padding:.9rem;text-align:center;">
+        <div style="font-size:.62rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Environment</div>
+        <div style="font-size:.9rem;font-weight:700;color:#334155;">🌳 ${env.green_cover||'—'}</div>
+        <div style="font-size:.7rem;color:#64748B;">Noise: ${env.noise_level||'—'}</div>
       </div>`;
   }
 
@@ -981,89 +1106,78 @@ function renderAnalysis(d) {
   const conn = d.connectivity;
   if (conn) {
     const items = [
-      ['🛣️', 'Highway', conn.nearest_highway],
-      ['🚂', 'Railway', conn.nearest_railway],
-      ['✈️', 'Airport', conn.nearest_airport],
-      ['🚌', 'Bus Stand', conn.nearest_bus_stand],
+      ['🛣️','Highway',conn.nearest_highway],
+      ['🚂','Railway',conn.nearest_railway],
+      ['✈️','Airport',conn.nearest_airport],
+      ['🚌','Bus Stand',conn.nearest_bus_stand],
     ];
-    document.getElementById('connectivity-content').innerHTML = items.map(([icon, label, val]) => `
-      <div style="display:flex;align-items:center;gap:.75rem;background:#F8FAFC;
-        border-radius:8px;padding:.75rem 1rem;">
-        <span style="font-size:1.2rem;">${icon}</span>
+    document.getElementById('connectivity-content').innerHTML = items.map(([ico,lbl,val])=>`
+      <div style="display:flex;align-items:center;gap:.65rem;background:#F8FAFC;border-radius:8px;padding:.7rem .9rem;">
+        <span style="font-size:1.1rem;">${ico}</span>
         <div>
-          <div style="font-size:.72rem;color:#94A3B8;font-weight:600;">${label}</div>
-          <div style="font-size:.85rem;font-weight:600;color:#0F172A;">${val?.name||'—'}</div>
-          <div style="font-size:.72rem;color:#1B4FD8;font-weight:700;">${val?.distance||'—'}</div>
+          <div style="font-size:.68rem;color:#94A3B8;font-weight:600;">${lbl}</div>
+          <div style="font-size:.82rem;font-weight:600;color:#0F172A;">${val?.name||'—'}</div>
+          <div style="font-size:.7rem;color:#1B4FD8;font-weight:700;">${val?.distance||'—'}</div>
         </div>
-      </div>`).join('') + (conn.metro_available ? '<div style="grid-column:1/-1;background:#EEF3FF;border:1px solid #1B4FD8;border-radius:8px;padding:.75rem;text-align:center;font-size:.82rem;font-weight:700;color:#1B4FD8;">🚇 Metro Available!</div>' : '');
+      </div>`).join('') +
+      (conn.metro_available ? `<div style="grid-column:1/-1;background:#EEF3FF;border:1px solid #1B4FD8;
+        border-radius:8px;padding:.7rem;text-align:center;font-size:.8rem;font-weight:700;color:#1B4FD8;">
+        🚇 Metro Available!</div>` : '');
   }
 
   // Market
   const mkt = d.market_insights;
   if (mkt) {
-    document.getElementById('market-trend-badge').textContent = (mkt.trend_icon||'📊') + ' ' + (mkt.trend||'Stable');
+    document.getElementById('market-trend-badge').textContent = (mkt.trend_icon||'📊')+' '+(mkt.trend||'Stable');
     document.getElementById('market-content').innerHTML = `
-      <div style="background:#F8FAFC;border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:.65rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Price/sqft</div>
-        <div style="font-size:.95rem;font-weight:800;color:#0F172A;">${mkt.price_range_sqft||'—'}</div>
-        <div style="font-size:.7rem;color:#64748B;margin-top:.2rem;">${mkt.trend_note||''}</div>
+      <div style="background:#F8FAFC;border-radius:9px;padding:.9rem;text-align:center;">
+        <div style="font-size:.62rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Price/sqft</div>
+        <div style="font-size:.9rem;font-weight:800;color:#0F172A;">${mkt.price_range_sqft||'—'}</div>
+        <div style="font-size:.68rem;color:#64748B;margin-top:.2rem;">${mkt.trend_note||''}</div>
       </div>
-      <div style="background:#F8FAFC;border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:.65rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Rental Yield</div>
-        <div style="font-size:1.2rem;font-weight:800;color:#16A34A;">${mkt.rental_yield||'—'}</div>
+      <div style="background:#F8FAFC;border-radius:9px;padding:.9rem;text-align:center;">
+        <div style="font-size:.62rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Rental Yield</div>
+        <div style="font-size:1.1rem;font-weight:800;color:#16A34A;">${mkt.rental_yield||'—'}</div>
       </div>
-      <div style="background:#F8FAFC;border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:.65rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Demand</div>
-        <div style="font-size:1rem;font-weight:800;color:#1B4FD8;">${mkt.demand_level||'—'}</div>
+      <div style="background:#F8FAFC;border-radius:9px;padding:.9rem;text-align:center;">
+        <div style="font-size:.62rem;color:#94A3B8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem;">Demand</div>
+        <div style="font-size:.9rem;font-weight:800;color:#1B4FD8;">${mkt.demand_level||'—'}</div>
       </div>`;
-    // Listing links
     const links = d.property_listings_link || {};
-    const city = (window._userData?.city||'').replace(/ /g,'').toLowerCase();
-    const state = (window._userData?.state||'').replace(/ /g,'').toLowerCase();
+    const city = encodeURIComponent(window._userData?.city||'');
     document.getElementById('link-99acres').href = links['99acres'] || `https://www.99acres.com/search/property/buy/${city}-real-estate`;
     document.getElementById('link-magicbricks').href = links.magicbricks || `https://www.magicbricks.com/property-for-sale/residential-real-estate?cityName=${city}`;
-    document.getElementById('link-housing').href = `https://housing.com/in/buy/${city}/${state}`;
+    document.getElementById('link-housing').href = `https://housing.com/in/buy/${city}`;
   }
 
-  // Nearby places
-  const places = d.nearby_places || {};
-  _localityData = places;
-  updateTabCounts();
-  renderTab(_activeTab);
-
-  // Expert verdict
+  // Expert Verdict
   const ev = d.expert_verdict;
   if (ev) {
-    const recColors = { 'highly recommended': '#16A34A', 'worth considering': '#EA580C', 'caution advised': '#DC2626' };
-    const rc = recColors[(ev.recommendation||'').toLowerCase()] || '#1B4FD8';
+    const rc = (ev.recommendation||'').toLowerCase().includes('highly') ? '#16A34A' :
+               (ev.recommendation||'').toLowerCase().includes('worth') ? '#EA580C' : '#DC2626';
     document.getElementById('expert-content').innerHTML = `
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;">
-        <div style="background:${rc}1A;border:2px solid ${rc}33;border-radius:10px;
-          padding:.75rem 1.5rem;text-align:center;flex-shrink:0;">
-          <div style="font-size:.65rem;color:#94A3B8;text-transform:uppercase;margin-bottom:.2rem;">Recommendation</div>
-          <div style="font-size:1rem;font-weight:800;color:${rc};">${ev.recommendation||'—'}</div>
+      <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+        <div style="background:${rc}1A;border:2px solid ${rc}33;border-radius:9px;
+          padding:.65rem 1.2rem;text-align:center;">
+          <div style="font-size:.62rem;color:#94A3B8;text-transform:uppercase;margin-bottom:.2rem;">Recommendation</div>
+          <div style="font-size:.92rem;font-weight:800;color:${rc};">${ev.recommendation||'—'}</div>
         </div>
-        <div style="background:#F8FAFC;border-radius:10px;padding:.75rem 1.5rem;text-align:center;flex-shrink:0;">
-          <div style="font-size:.65rem;color:#94A3B8;text-transform:uppercase;margin-bottom:.2rem;">Investment Rating</div>
-          <div style="font-size:1rem;font-weight:800;color:#1B4FD8;">${ev.investment_rating||'—'} ⭐</div>
+        <div style="background:#F8FAFC;border-radius:9px;padding:.65rem 1.2rem;text-align:center;">
+          <div style="font-size:.62rem;color:#94A3B8;text-transform:uppercase;margin-bottom:.2rem;">Investment Rating</div>
+          <div style="font-size:.92rem;font-weight:800;color:#1B4FD8;">${ev.investment_rating||'—'} ⭐</div>
         </div>
       </div>
-      <p style="font-size:.85rem;color:#334155;line-height:1.7;margin-bottom:1rem;">${ev.summary||''}</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-        ${ev.positives?.length ? `<div style="background:#F0FDF4;border-radius:8px;padding:1rem;">
-          <div style="font-size:.72rem;font-weight:700;color:#16A34A;margin-bottom:.5rem;">✅ Positives</div>
-          ${ev.positives.map(p=>`<div style="font-size:.78rem;color:#166534;margin-bottom:.3rem;">• ${p}</div>`).join('')}
+      <p style="font-size:.83rem;color:#334155;line-height:1.7;margin-bottom:.9rem;">${ev.summary||''}</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+        ${ev.positives?.length ? `<div style="background:#F0FDF4;border-radius:8px;padding:.8rem;">
+          <div style="font-size:.68rem;font-weight:700;color:#16A34A;margin-bottom:.4rem;">✅ Positives</div>
+          ${ev.positives.map(p=>`<div style="font-size:.75rem;color:#166534;margin-bottom:.2rem;">• ${p}</div>`).join('')}
         </div>` : ''}
-        ${ev.red_flags?.length ? `<div style="background:#FEF2F2;border-radius:8px;padding:1rem;">
-          <div style="font-size:.72rem;font-weight:700;color:#DC2626;margin-bottom:.5rem;">⚠️ Watch Out</div>
-          ${ev.red_flags.map(f=>`<div style="font-size:.78rem;color:#991B1B;margin-bottom:.3rem;">• ${f}</div>`).join('')}
+        ${ev.red_flags?.length ? `<div style="background:#FEF2F2;border-radius:8px;padding:.8rem;">
+          <div style="font-size:.68rem;font-weight:700;color:#DC2626;margin-bottom:.4rem;">⚠️ Watch Out</div>
+          ${ev.red_flags.map(f=>`<div style="font-size:.75rem;color:#991B1B;margin-bottom:.2rem;">• ${f}</div>`).join('')}
         </div>` : ''}
       </div>`;
-    // Update prop status
-    document.getElementById('prop-status').textContent = '✅ Analysis Complete';
-    document.getElementById('prop-status').style.background = '#DCFCE7';
-    document.getElementById('prop-status').style.color = '#16A34A';
-    document.getElementById('prop-status').style.border = '1px solid rgba(22,163,74,.2)';
   }
 }
 
@@ -1087,18 +1201,100 @@ function renderTab(cat) {
   const body = document.getElementById('locality-body');
   const items = _localityData[cat] || [];
   if (!items.length) {
-    body.innerHTML = '<div class="loc-empty">😕 Is category mein data nahi mila.</div>';
+    body.innerHTML = '<div class="loc-empty">😕 Is category mein koi jagah nahi mili 3km ke andar.</div>';
     return;
   }
   body.innerHTML = '<div class="place-list">' + items.map(p => `
     <div class="place-item">
-      <div class="place-icon">${p.icon||'📍'}</div>
+      <div class="place-icon">${p.icon}</div>
       <div class="place-info">
-        <div class="place-name">${p.name||''}</div>
-        <div class="place-type">${p.type||''}</div>
+        <div class="place-name">${p.name}</div>
+        <div class="place-type">${p.type}</div>
       </div>
-      <div class="place-dist">${p.distance_text||''}</div>
-    </div>`).join('') + '</div>';
-}</script>
+      <div class="place-dist">${p.distance_text}</div>
+    </div>
+  `).join('') + '</div>';
+}
+
+// Close mob menu on link click
+document.querySelectorAll('.mob-menu a').forEach(a=>a.addEventListener('click',closeMob));
+</script>
+
+<!-- EMAIL CONFIRM MODAL -->
+<div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:1000;align-items:center;justify-content:center;padding:1rem;">
+  <div style="background:white;border-radius:16px;padding:2rem;max-width:420px;width:100%;
+    box-shadow:0 25px 60px rgba(0,0,0,.3);">
+    <div style="font-size:2rem;text-align:center;margin-bottom:.5rem;">📋</div>
+    <div style="font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;
+      color:#0F172A;text-align:center;margin-bottom:.25rem;">Aapki Details Bharo</div>
+    <div style="font-size:.8rem;color:#64748B;text-align:center;margin-bottom:1.2rem;">
+      Report aapke email pe bheja jaayega — <strong id="modal-plan"></strong><span id="modal-plan-amount" style="display:none"></span>
+    </div>
+
+    <div style="margin-bottom:.75rem;">
+      <label style="font-size:.7rem;font-weight:600;color:#334155;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.3rem;">Full Name</label>
+      <input id="modal-name" type="text" placeholder="Rahul Sharma"
+        style="width:100%;padding:.7rem .9rem;border:1.5px solid #E2E8F0;border-radius:8px;font-size:.9rem;outline:none;font-family:'Inter',sans-serif;"/>
+    </div>
+    <div style="margin-bottom:.75rem;">
+      <label style="font-size:.7rem;font-weight:600;color:#334155;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.3rem;">Mobile Number</label>
+      <input id="modal-phone" type="tel" placeholder="+91 73849 49090"
+        style="width:100%;padding:.7rem .9rem;border:1.5px solid #E2E8F0;border-radius:8px;font-size:.9rem;outline:none;font-family:'Inter',sans-serif;"/>
+    </div>
+    <div style="margin-bottom:1rem;">
+      <label style="font-size:.7rem;font-weight:600;color:#334155;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.3rem;">Email Address</label>
+      <input id="modal-email" type="email" placeholder="rahul@gmail.com"
+        style="width:100%;padding:.7rem .9rem;border:1.5px solid #E2E8F0;border-radius:8px;font-size:.9rem;outline:none;font-family:'Inter',sans-serif;"/>
+    </div>
+
+    <div style="background:#F0FDF4;border:1px solid rgba(22,163,74,.2);border-radius:8px;
+      padding:.75rem;margin-bottom:1rem;font-size:.78rem;color:#16A34A;text-align:center;">
+      ✅ Report 24-48 hours mein email pe milegi
+    </div>
+    <button id="modal-confirm-btn"
+      style="width:100%;background:#1B4FD8;color:white;border:none;padding:.9rem;
+      border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;margin-bottom:.6rem;">
+      ✅ Confirm & Get Report
+    </button>
+    <button onclick="document.getElementById('email-modal').style.display='none'"
+      style="width:100%;background:none;border:1.5px solid #E2E8F0;color:#64748B;
+      padding:.75rem;border-radius:8px;font-weight:600;font-size:.85rem;cursor:pointer;">
+      Cancel
+    </button>
+  </div>
+</div>
+
+<!-- THANK YOU PAGE -->
+<div id="page-thankyou" style="display:none;padding:80px 5% 60px;max-width:600px;margin:0 auto;">
+  <div style="background:white;border-radius:20px;padding:3rem 2rem;
+    box-shadow:0 16px 48px rgba(0,0,0,.14);margin-top:2rem;text-align:center;">
+    <div style="font-size:4rem;margin-bottom:1rem;">🎉</div>
+    <div style="font-family:'Poppins',sans-serif;font-size:1.5rem;font-weight:800;
+      color:#0F172A;margin-bottom:.5rem;">
+      Request Successful!
+    </div>
+    <div style="font-size:.95rem;color:#64748B;line-height:1.8;margin-bottom:1.5rem;">
+      Namaste <strong id="ty-name"></strong>!<br/>
+      Aapki <strong id="ty-plan"></strong> report prepare ho rahi hai.<br/>
+      <strong style="color:#1B4FD8" id="ty-email"></strong><br/>
+      pe PDF milegi <strong>24-48 hours</strong> mein.
+    </div>
+    <div style="background:#F0FDF4;border:1px solid rgba(22,163,74,.2);border-radius:12px;
+      padding:1.2rem;margin-bottom:2rem;">
+      <div style="font-size:.85rem;color:#16A34A;font-weight:600;line-height:1.8;">
+        ✅ Property check queue mein hai<br/>
+        📧 PDF report email pe aayegi<br/>
+        📲 WhatsApp update bhi milega
+      </div>
+    </div>
+    <button onclick="showLanding()"
+      style="background:#1B4FD8;color:white;border:none;padding:.9rem 2rem;
+      border-radius:8px;font-weight:700;font-size:.95rem;cursor:pointer;width:100%;">
+      ← Check Another Property
+    </button>
+  </div>
+</div>
+
 </body>
 </html>
