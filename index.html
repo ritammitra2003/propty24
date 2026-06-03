@@ -924,6 +924,7 @@ function runCheck(){
         document.getElementById('page-result').style.display='block';
         window.scrollTo({top:0,behavior:'smooth'});
         // Fetch locality data
+        fetch(API_URL+'/api/log-search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({address:fullAddress,state,district,city,proptype,pin})}).catch(()=>{});
         fetchLocality(window._userData.fullAddress);
       },500);
       return;
