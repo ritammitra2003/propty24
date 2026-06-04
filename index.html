@@ -24,7 +24,7 @@ html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:var(--gray-50);color:var(--gray-900);overflow-x:hidden;}
 
 /* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(--white);
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:72px;background:var(--white);
   border-bottom:1px solid var(--gray-200);display:flex;align-items:center;
   justify-content:space-between;padding:0 5%;box-shadow:var(--shadow-sm);}
 .logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;}
@@ -59,7 +59,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;background:var(-
 #page-landing{display:block;}
 #page-result{display:none;}
 
-.hero{padding:80px 5% 60px;background:linear-gradient(135deg,#0F172A 0%,#1B4FD8 100%);
+.hero{padding:88px 5% 60px;background:linear-gradient(135deg,#0F172A 0%,#1B4FD8 100%);
   min-height:100vh;display:flex;align-items:center;}
 .hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;
   grid-template-columns:1.1fr .9fr;gap:4rem;align-items:center;}
@@ -323,16 +323,29 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
   .nav-links,.nav-wa{display:none;}
   .hbg{display:flex;}
   .mob-menu{display:flex;}
-  .hero{padding:80px 5% 50px;min-height:auto;}
+  .hero{padding:90px 4% 50px;min-height:auto;}
+  .hero-h1{font-size:1.9rem !important;}
+  .hero-tags{flex-direction:column;gap:.5rem;}
+  .h-tag{font-size:.76rem;}
+  .check-card{padding:1.4rem 1rem;}
   .steps{grid-template-columns:1fr;}
   .plans-grid{grid-template-columns:1fr;}
   .ft-grid{grid-template-columns:1fr;}
-  .result-page{padding:75px 4% 50px;}
+  .result-page{padding:80px 3.5% 50px;}
   .check-row{flex-wrap:wrap;gap:.75rem;}
   .cr-result{text-align:left;}
   .prop-bar{flex-direction:column;align-items:flex-start;}
   .prop-status{margin-left:0;}
   .trust-strip{gap:1.5rem;}
+  .free-card-header{flex-direction:column;align-items:flex-start;gap:.4rem;}
+  .locked-card{padding:1.5rem 1rem;}
+  .how-sec{padding:50px 4%;}
+  footer{padding:2rem 4% 1.5rem;}
+  .grid-3col{grid-template-columns:1fr 1fr !important;}
+  .grid-2col{grid-template-columns:1fr !important;}
+  .score-inner-grid{grid-template-columns:1fr !important;text-align:center;}
+  #score-breakdown{grid-template-columns:1fr 1fr !important;}
+  .modal-box{padding:1.4rem 1rem !important;margin:0 .5rem !important;}
 }
 </style>
 </head>
@@ -341,7 +354,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
 <!-- NAV -->
 <nav id="navbar">
   <a href="#" class="logo" onclick="showLanding()">
-    <img src="https://raw.githubusercontent.com/ritammitra2003/propty24/main/propty24_logo.jpg" alt="PROPTY24" style="height:60px;width:auto;object-fit:contain;"/>
+    <img src="https://raw.githubusercontent.com/ritammitra2003/propty24/main/propty24_logo.jpg" alt="PROPTY24" style="height:52px;width:auto;object-fit:contain;max-width:220px;"/>
   </a>
   <ul class="nav-links">
     <li><a href="#how">How It Works</a></li>
@@ -611,7 +624,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
           <div style="font-weight:700;font-size:1rem;color:#0F172A;">📊 Locality Score</div>
           <div style="font-size:.72rem;color:#94A3B8;">AI · 10 parameters</div>
         </div>
-        <div style="padding:1.5rem;display:grid;grid-template-columns:110px 1fr;gap:1.5rem;align-items:start;">
+        <div class="score-inner-grid" style="padding:1.5rem;display:grid;grid-template-columns:110px 1fr;gap:1.5rem;align-items:start;">
           <div style="text-align:center;">
             <div id="score-circle" style="width:86px;height:86px;border-radius:50%;border:6px solid #16A34A;
               display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;">
@@ -632,7 +645,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
         <div style="padding:1.1rem 1.5rem;border-bottom:1px solid #F1F5F9;">
           <div style="font-weight:700;font-size:1rem;color:#0F172A;">🌿 Environment & Risk</div>
         </div>
-        <div id="environment-content" style="padding:1.2rem 1.5rem;
+        <div id="environment-content" class="grid-3col" style="padding:1.2rem 1.5rem;
           display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
           <div style="color:#94A3B8;font-size:.75rem;">Loading...</div>
         </div>
@@ -644,7 +657,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
         <div style="padding:1.1rem 1.5rem;border-bottom:1px solid #F1F5F9;">
           <div style="font-weight:700;font-size:1rem;color:#0F172A;">🚌 Connectivity</div>
         </div>
-        <div id="connectivity-content" style="padding:1.2rem 1.5rem;
+        <div id="connectivity-content" class="grid-2col" style="padding:1.2rem 1.5rem;
           display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;">
           <div style="color:#94A3B8;font-size:.75rem;">Loading...</div>
         </div>
@@ -659,7 +672,7 @@ footer{background:var(--gray-900);padding:3rem 5% 1.5rem;}
           <div id="market-trend-badge" style="font-size:.72rem;font-weight:700;padding:.2rem .7rem;
             border-radius:100px;background:#DCFCE7;color:#16A34A;">📈 Rising</div>
         </div>
-        <div id="market-content" style="padding:1.2rem 1.5rem;
+        <div id="market-content" class="grid-3col" style="padding:1.2rem 1.5rem;
           display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
           <div style="color:#94A3B8;font-size:.75rem;">Loading...</div>
         </div>
@@ -1165,7 +1178,7 @@ function renderAnalysis(d) {
         </div>
       </div>
       <p style="font-size:.83rem;color:#334155;line-height:1.7;margin-bottom:.9rem;">${ev.summary||''}</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;">
         ${ev.positives?.length ? `<div style="background:#F0FDF4;border-radius:8px;padding:.8rem;">
           <div style="font-size:.68rem;font-weight:700;color:#16A34A;margin-bottom:.4rem;">✅ Positives</div>
           ${ev.positives.map(p=>`<div style="font-size:.75rem;color:#166534;margin-bottom:.2rem;">• ${p}</div>`).join('')}
@@ -1220,8 +1233,8 @@ document.querySelectorAll('.mob-menu a').forEach(a=>a.addEventListener('click',c
 <!-- EMAIL CONFIRM MODAL -->
 <div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
   z-index:1000;align-items:center;justify-content:center;padding:1rem;">
-  <div style="background:white;border-radius:16px;padding:2rem;max-width:420px;width:100%;
-    box-shadow:0 25px 60px rgba(0,0,0,.3);">
+  <div class="modal-box" style="background:white;border-radius:16px;padding:2rem;max-width:420px;width:100%;
+    box-shadow:0 25px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto;">
     <div style="font-size:2rem;text-align:center;margin-bottom:.5rem;">📋</div>
     <div style="font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;
       color:#0F172A;text-align:center;margin-bottom:.25rem;">Aapki Details Bharo</div>
